@@ -1,9 +1,10 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.24;
 pragma experimental ABIEncoderV2;
 
 import "./REWToken.sol";
+import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract ReviewNetwork {
+contract ReviewNetwork is Ownable {
     REWToken token;
 
     enum SurveyStatus { IDLE, FUNDED, IN_PROGRESS, COMPLETED }
@@ -14,6 +15,7 @@ contract ReviewNetwork {
 
     struct Survey {
         address creator;
+        string publicKey;
         string title;
         string surveyJsonHash;
         uint rewardPerSurvey;
@@ -25,47 +27,108 @@ contract ReviewNetwork {
     // surveyJsonHash => survey
     mapping (string => Survey) surveys;
 
-    event SurveyAdded(
-        address creator,
+    struct Brand {
+        address addedBy;
+        string name;
+        string logo;
+        string metaJsonHash;
+    }
+
+    mapping (address => Brand) brands;
+    
+    struct Product {
+        address addedBy;
+        Brand brand;
+        string name;
+        string image;
+        string metaJsonHash;
+    }
+
+    mapping (address => Product) products;
+
+    struct User {
+        string username;
+    }
+
+    mapping (address => User) users;
+
+    struct Review {
+        User author;
+        Product product;
+        uint score;
+        string metaJsonHash;
+    }
+
+    mapping (address => Review) reviews;
+
+    event LogSurveyAdded(
+        address indexed creator,
+        string publicKey,
         string title,
         string surveyJsonHash,
         uint rewardPerSurvey
     );
     
-    event SurveyFunded(
-        address creator,
+    event LogSurveyFunded(
+        address indexed creator,
+        string publicKey,
         string title,
         string surveyJsonHash,
         uint rewardPerSurvey
     );
     
-    event SurveyStarted(
-        address creator,
+    event LogSurveyStarted(
+        address indexed creator,
+        string publicKey,
         string title,
         string surveyJsonHash,
         uint rewardPerSurvey
     );
 
-    event SurveyCompleted(
-        address creator,
+    event LogSurveyCompleted(
+        address indexed creator,
+        string publicKey,
         string title,
         string surveyJsonHash,
         uint rewardPerSurvey
     );
 
-    event SurveyAnswered(
-        address user,
+    event LogSurveyAnswered(
+        address indexed user,
+        string surveyJsonHash,
         string title,
         uint rewardPerSurvey
     );
 
-    function ReviewNetwork(address REWTokenAddress) public {
+    event LogBrandAdded(
+        address indexed brandAddress,
+        string name,
+        string logo,
+        string metaHashJson
+    );
+
+    event LogProductAdded(
+        address indexed productAddress,
+        address indexed brandAddress,
+        string name,
+        string image,
+        string metaHashJson
+    );
+
+    event LogReviewAdded(
+        address reviewAddress,
+        address indexed authorAddress,
+        address indexed productAddress
+    );
+
+    constructor (address REWTokenAddress) public {
         token = REWToken(REWTokenAddress);
     }
 
-    function createSurvey(string title, string surveyJsonHash, uint rewardPerSurvey) public {
+    function createSurvey(string publicKey, string title, string surveyJsonHash, uint rewardPerSurvey) public {
         Survey memory s = Survey(
             msg.sender,
+            publicKey,
             title,
             surveyJsonHash,
             rewardPerSurvey,
@@ -75,8 +138,9 @@ contract ReviewNetwork {
 
         surveys[surveyJsonHash] = s;
 
-        SurveyAdded(
+        emit LogSurveyAdded(
             msg.sender,
+            s.publicKey,
             title,
             surveyJsonHash,
             rewardPerSurvey
@@ -95,8 +159,9 @@ contract ReviewNetwork {
         surveys[surveyJsonHash].funds += amount;
         surveys[surveyJsonHash].status = SurveyStatus.FUNDED;
 
-        SurveyFunded(
+        emit LogSurveyFunded(
             msg.sender,
+            survey.publicKey,
             survey.title,
             survey.surveyJsonHash,
             survey.rewardPerSurvey
@@ -110,8 +175,9 @@ contract ReviewNetwork {
 
         surveys[surveyJsonHash].status = SurveyStatus.IN_PROGRESS;
 
-        SurveyStarted(
+        emit LogSurveyStarted(
             msg.sender,
+            survey.publicKey,
             survey.title,
             survey.surveyJsonHash,
             survey.rewardPerSurvey
@@ -125,15 +191,16 @@ contract ReviewNetwork {
 
         surveys[surveyJsonHash].status = SurveyStatus.COMPLETED;
 
-        SurveyCompleted(
+        emit LogSurveyCompleted(
             msg.sender,
+            survey.publicKey,
             survey.title,
             survey.surveyJsonHash,
             survey.rewardPerSurvey
         );
     }
 
-    function getSurveyFunds(string surveyJsonHash) public view returns (uint) {
+    function getFunds(string surveyJsonHash) public view returns (uint) {
         return surveys[surveyJsonHash].funds;
     }
 
@@ -141,20 +208,84 @@ contract ReviewNetwork {
         return surveys[surveyJsonHash].status;
     }
 
-    function answerSurvey(string surveyJsonHash, string answersJsonHash) public {
+    function answerSurvey(string surveyJsonHash, string answersJsonHash) public returns(Answer) {
         Survey memory survey = surveys[surveyJsonHash];
-        require(keccak256(answersJsonHash) != keccak256(""));
-        require(keccak256(surveyJsonHash) != keccak256(""));
+        require(keccak256(bytes(answersJsonHash)) != keccak256(""));
+        require(keccak256(bytes(surveyJsonHash)) != keccak256(""));
         require(survey.status == SurveyStatus.IN_PROGRESS);
         // require(keccak256(surveys[surveyJsonHash].answers[msg.sender].answersJsonHash) == keccak256(""));
         require(survey.funds >= survey.rewardPerSurvey);
         surveys[surveyJsonHash].answers[msg.sender] = Answer(answersJsonHash);
         require(token.transfer(msg.sender, survey.rewardPerSurvey));
         surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
-        SurveyAnswered(msg.sender, survey.title, survey.rewardPerSurvey);
+        emit LogSurveyAnswered(msg.sender, surveyJsonHash, survey.title, survey.rewardPerSurvey);
     }
 
     function isSurveyAnsweredBy(string surveyJsonHash, address user) public view returns (bool) {
-        return keccak256(surveys[surveyJsonHash].answers[user].answersJsonHash) == keccak256("");
+        return keccak256(bytes(surveys[surveyJsonHash].answers[user].answersJsonHash)) != keccak256("");
+    }
+
+    function createBrand (
+        address brandAddress,
+        string name,
+        string logo,
+        string metaJsonHash
+    ) public onlyOwner {
+        Brand memory brand = Brand({
+            addedBy: msg.sender,
+            name: name,
+            logo: logo,
+            metaJsonHash: metaJsonHash
+        });
+
+        brands[brandAddress] = brand;
+
+        emit LogBrandAdded(brandAddress, name, logo, metaJsonHash);
+    }
+
+    function createProduct (
+        address productAddress,
+        address brandAddress,
+        string name,
+        string image,
+        string metaJsonHash
+    ) public onlyOwner {
+        Brand memory brand = brands[brandAddress];
+
+        Product memory product = Product({
+            addedBy: msg.sender,
+            brand: brand,
+            name: name,
+            image: image,
+            metaJsonHash: metaJsonHash
+        });
+
+        products[brandAddress] = product;
+
+        emit LogProductAdded(productAddress, brandAddress, name, image, metaJsonHash);
+    }
+
+    function createReview (
+        address reviewAddress,
+        address authorAddress,
+        address productAddress,
+        uint score,
+        string metaJsonHash
+    ) public {
+        require(score >= 1 && score <= 4);
+
+        User memory author = users[authorAddress];
+        Product memory product = products[productAddress];
+
+        Review memory review = Review({
+            author: author,
+            product: product,
+            score: score,
+            metaJsonHash: metaJsonHash
+        });
+
+        reviews[reviewAddress] = review;
+
+        emit LogReviewAdded(reviewAddress, authorAddress, productAddress);
     }
 }

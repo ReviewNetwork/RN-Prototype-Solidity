@@ -1,4 +1,4 @@
-pragma solidity ^0.4.19;
+pragma solidity ^0.4.24;
 
 import "zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
 
@@ -8,7 +8,7 @@ contract REWToken is StandardToken {
     uint8 public decimals = 18;
     uint public INITIAL_SUPPLY = 5000000000;
 
-    function REWToken() public {
+    constructor () public {
         totalSupply_ = INITIAL_SUPPLY;
         balances[msg.sender] = INITIAL_SUPPLY;
     }
