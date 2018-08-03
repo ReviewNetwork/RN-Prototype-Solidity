@@ -1,7 +1,11 @@
+require('dotenv').config()
 const HDWalletProvider = require('truffle-hdwallet-provider')
+const PrivateKeyProvider = require("truffle-privatekey-provider")
 
-const mnemonic = 'crowd party laugh address sheriff fix trend pen present boost oil castle'
-const infuraToken = '4Hz0eFn9CA8ojZPjLdoG'
+
+const mnemonic = process.env.MNEMONIC
+privateKey = process.env.PRIVATE_KEY
+const infuraToken = process.env.INFURA_TOKEN
 
 module.exports = {
   networks: {
@@ -16,6 +20,13 @@ module.exports = {
         return new HDWalletProvider(mnemonic, `https://ropsten.infura.io/${infuraToken}`)
       },
       gas: 3712388
+    },
+    rinkeby:  {
+      network_id: 4,
+      provider: function() {
+        return new PrivateKeyProvider(privateKey, `https://rinkeby.infura.io/${infuraToken}`)
+      },
+      gas: 4612388
     }
   },
   // rpc: {
