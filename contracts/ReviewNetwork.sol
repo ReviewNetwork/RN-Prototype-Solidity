@@ -96,6 +96,7 @@ contract ReviewNetwork is Ownable {
     event LogSurveyAnswered(
         address indexed user,
         string surveyJsonHash,
+        string answersJsonHash,
         string title,
         uint rewardPerSurvey
     );
@@ -157,7 +158,10 @@ contract ReviewNetwork is Ownable {
 
         require(token.transferFrom(msg.sender, this, amount));
         surveys[surveyJsonHash].funds += amount;
-        surveys[surveyJsonHash].status = SurveyStatus.FUNDED;
+        
+        if(survey.status == SurveyStatus.IDLE) {
+            surveys[surveyJsonHash].status = SurveyStatus.FUNDED;
+        }
 
         emit LogSurveyFunded(
             msg.sender,
@@ -208,17 +212,17 @@ contract ReviewNetwork is Ownable {
         return surveys[surveyJsonHash].status;
     }
 
-    function answerSurvey(string surveyJsonHash, string answersJsonHash) public returns(Answer) {
+    function answerSurvey(string surveyJsonHash, string answersJsonHash) public {
         Survey memory survey = surveys[surveyJsonHash];
         require(keccak256(bytes(answersJsonHash)) != keccak256(""));
         require(keccak256(bytes(surveyJsonHash)) != keccak256(""));
         require(survey.status == SurveyStatus.IN_PROGRESS);
-        // require(keccak256(surveys[surveyJsonHash].answers[msg.sender].answersJsonHash) == keccak256(""));
+        require(keccak256(surveys[surveyJsonHash].answers[msg.sender].answersJsonHash) == keccak256(""));
         require(survey.funds >= survey.rewardPerSurvey);
         surveys[surveyJsonHash].answers[msg.sender] = Answer(answersJsonHash);
         require(token.transfer(msg.sender, survey.rewardPerSurvey));
         surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
-        emit LogSurveyAnswered(msg.sender, surveyJsonHash, survey.title, survey.rewardPerSurvey);
+        emit LogSurveyAnswered(msg.sender, surveyJsonHash, answersJsonHash, survey.title, survey.rewardPerSurvey);
     }
 
     function isSurveyAnsweredBy(string surveyJsonHash, address user) public view returns (bool) {
