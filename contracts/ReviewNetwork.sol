@@ -20,6 +20,7 @@ contract ReviewNetwork is Ownable {
         string surveyJsonHash;
         uint rewardPerSurvey;
         uint funds;
+        uint maxAnswers;
         SurveyStatus status;
         mapping (address => Answer) answers;
     }
@@ -66,7 +67,8 @@ contract ReviewNetwork is Ownable {
         string publicKey,
         string title,
         string surveyJsonHash,
-        uint rewardPerSurvey
+        uint rewardPerSurvey,
+        uint maxAnswers
     );
     
     event LogSurveyFunded(
@@ -74,7 +76,8 @@ contract ReviewNetwork is Ownable {
         string publicKey,
         string title,
         string surveyJsonHash,
-        uint rewardPerSurvey
+        uint rewardPerSurvey,
+        uint maxAnswers
     );
     
     event LogSurveyStarted(
@@ -82,7 +85,8 @@ contract ReviewNetwork is Ownable {
         string publicKey,
         string title,
         string surveyJsonHash,
-        uint rewardPerSurvey
+        uint rewardPerSurvey,
+        uint maxAnswers
     );
 
     event LogSurveyCompleted(
@@ -90,7 +94,8 @@ contract ReviewNetwork is Ownable {
         string publicKey,
         string title,
         string surveyJsonHash,
-        uint rewardPerSurvey
+        uint rewardPerSurvey,
+        uint maxAnswers
     );
 
     event LogSurveyAnswered(
@@ -126,7 +131,7 @@ contract ReviewNetwork is Ownable {
         token = REWToken(REWTokenAddress);
     }
 
-    function createSurvey(string publicKey, string title, string surveyJsonHash, uint rewardPerSurvey) public {
+    function createSurvey(string publicKey, string title, string surveyJsonHash, uint rewardPerSurvey, uint maxAnswers) public {
         Survey memory s = Survey(
             msg.sender,
             publicKey,
@@ -134,6 +139,7 @@ contract ReviewNetwork is Ownable {
             surveyJsonHash,
             rewardPerSurvey,
             0,
+            maxAnswers,
             SurveyStatus.IDLE
         );
 
@@ -144,7 +150,8 @@ contract ReviewNetwork is Ownable {
             s.publicKey,
             title,
             surveyJsonHash,
-            rewardPerSurvey
+            rewardPerSurvey,
+            maxAnswers
         );
     }
 
@@ -168,7 +175,8 @@ contract ReviewNetwork is Ownable {
             survey.publicKey,
             survey.title,
             survey.surveyJsonHash,
-            survey.rewardPerSurvey
+            survey.rewardPerSurvey,
+            survey.maxAnswers
         );
     }
 
@@ -184,7 +192,8 @@ contract ReviewNetwork is Ownable {
             survey.publicKey,
             survey.title,
             survey.surveyJsonHash,
-            survey.rewardPerSurvey
+            survey.rewardPerSurvey,
+            survey.maxAnswers
         );
     }
 
@@ -200,7 +209,8 @@ contract ReviewNetwork is Ownable {
             survey.publicKey,
             survey.title,
             survey.surveyJsonHash,
-            survey.rewardPerSurvey
+            survey.rewardPerSurvey,
+            survey.maxAnswers
         );
     }
 
@@ -212,17 +222,33 @@ contract ReviewNetwork is Ownable {
         return surveys[surveyJsonHash].status;
     }
 
-    function answerSurvey(string surveyJsonHash, string answersJsonHash) public {
+    function answerSurvey(string surveyJsonHash, string answersJsonHash) public returns (bool) {
         Survey memory survey = surveys[surveyJsonHash];
         require(keccak256(bytes(answersJsonHash)) != keccak256(""));
         require(keccak256(bytes(surveyJsonHash)) != keccak256(""));
         require(survey.status == SurveyStatus.IN_PROGRESS);
         require(keccak256(surveys[surveyJsonHash].answers[msg.sender].answersJsonHash) == keccak256(""));
-        require(survey.funds >= survey.rewardPerSurvey);
+
+        if (survey.funds < survey.rewardPerSurvey) {
+            surveys[surveyJsonHash].status = SurveyStatus.COMPLETED;
+            emit LogSurveyCompleted(
+                survey.creator,
+                survey.publicKey,
+                survey.title,
+                survey.surveyJsonHash,
+                survey.rewardPerSurvey,
+                survey.maxAnswers
+            );
+
+            return false;
+        }
+
         surveys[surveyJsonHash].answers[msg.sender] = Answer(answersJsonHash);
         require(token.transfer(msg.sender, survey.rewardPerSurvey));
         surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
         emit LogSurveyAnswered(msg.sender, surveyJsonHash, answersJsonHash, survey.title, survey.rewardPerSurvey);
+
+        return true;
     }
 
     function isSurveyAnsweredBy(string surveyJsonHash, address user) public view returns (bool) {
