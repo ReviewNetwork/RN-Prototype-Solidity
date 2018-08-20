@@ -229,7 +229,13 @@ contract ReviewNetwork is Ownable {
         require(survey.status == SurveyStatus.IN_PROGRESS);
         require(keccak256(surveys[surveyJsonHash].answers[msg.sender].answersJsonHash) == keccak256(""));
 
-        if (survey.funds < survey.rewardPerSurvey) {
+
+        surveys[surveyJsonHash].answers[msg.sender] = Answer(answersJsonHash);
+        require(token.transfer(msg.sender, survey.rewardPerSurvey));
+        surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
+        emit LogSurveyAnswered(msg.sender, surveyJsonHash, answersJsonHash, survey.title, survey.rewardPerSurvey);
+
+        if (surveys[surveyJsonHash].funds < survey.rewardPerSurvey) {
             surveys[surveyJsonHash].status = SurveyStatus.COMPLETED;
             emit LogSurveyCompleted(
                 survey.creator,
@@ -242,12 +248,6 @@ contract ReviewNetwork is Ownable {
 
             return false;
         }
-
-        surveys[surveyJsonHash].answers[msg.sender] = Answer(answersJsonHash);
-        require(token.transfer(msg.sender, survey.rewardPerSurvey));
-        surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
-        emit LogSurveyAnswered(msg.sender, surveyJsonHash, answersJsonHash, survey.title, survey.rewardPerSurvey);
-
         return true;
     }
 
