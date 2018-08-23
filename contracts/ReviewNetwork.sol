@@ -266,7 +266,7 @@ contract ReviewNetwork is Ownable {
         surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
         emit LogSurveyAnswered(msg.sender, surveyJsonHash, answersJsonHash, survey.title, survey.rewardPerSurvey);
 
-        if (survey.funds < survey.rewardPerSurvey) {
+        if (surveys[surveyJsonHash].funds < survey.rewardPerSurvey) {
             surveys[surveyJsonHash].status = SurveyStatus.COMPLETED;
             emit LogSurveyCompleted(
                 survey.creator,
