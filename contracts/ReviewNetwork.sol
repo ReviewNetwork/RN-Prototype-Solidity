@@ -6,8 +6,10 @@ import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract ReviewNetwork is Ownable {
     REWToken token;
+    uint constant NUMBER_OF_VALIDATORS = 7;
 
     enum SurveyStatus { IDLE, FUNDED, IN_PROGRESS, COMPLETED }
+    enum ReviewStatus { PENDING, APPROVED, REJECTED }
 
     struct Answer {
         string answersJsonHash;
@@ -25,9 +27,6 @@ contract ReviewNetwork is Ownable {
         mapping (address => Answer) answers;
     }
 
-    // surveyJsonHash => survey
-    mapping (string => Survey) surveys;
-
     struct Brand {
         address addedBy;
         string name;
@@ -35,32 +34,39 @@ contract ReviewNetwork is Ownable {
         string metaJsonHash;
     }
 
-    mapping (address => Brand) brands;
-    
     struct Product {
         address addedBy;
         Brand brand;
+        uint categoryId;
+        uint subcategoryId;
         string name;
         string image;
         string metaJsonHash;
     }
 
-    mapping (address => Product) products;
-
     struct User {
         string username;
     }
-
-    mapping (address => User) users;
 
     struct Review {
         User author;
         Product product;
         uint score;
         string metaJsonHash;
+        ReviewStatus status;
+        address[] chosenValidators;
+        mapping (address => int) validationVotes;
     }
 
+    /**
+     * key: string - Survey JSON IPFS hash
+     */
+    mapping (string => Survey) surveys;
+    mapping (address => Brand) brands;
+    mapping (address => Product) products;
+    mapping (address => User) users;
     mapping (address => Review) reviews;
+    address[] validators;
 
     event LogSurveyAdded(
         address indexed creator,
@@ -114,8 +120,10 @@ contract ReviewNetwork is Ownable {
     );
 
     event LogProductAdded(
-        address indexed productAddress,
+        address productAddress,
         address indexed brandAddress,
+        uint indexed categoryId,
+        uint indexed subcategoryId,
         string name,
         string image,
         string metaHashJson
@@ -124,14 +132,38 @@ contract ReviewNetwork is Ownable {
     event LogReviewAdded(
         address reviewAddress,
         address indexed authorAddress,
-        address indexed productAddress
+        address indexed productAddress,
+        string metaJsonHash
+    );
+
+    event LogValidatorAdded(
+        address validatorAddress
+    );
+
+    event LogValidatorChosen(
+        address indexed reviewAddress,
+        address indexed validatorAddress
+    );
+
+    event LogReviewApproved(
+        address indexed reviewAddress
+    );
+
+    event LogReviewRejected(
+        address indexed reviewAddress
     );
 
     constructor (address REWTokenAddress) public {
         token = REWToken(REWTokenAddress);
     }
 
-    function createSurvey(string publicKey, string title, string surveyJsonHash, uint rewardPerSurvey, uint maxAnswers) public {
+    function createSurvey(
+        string publicKey,
+        string title,
+        string surveyJsonHash,
+        uint rewardPerSurvey,
+        uint maxAnswers
+    ) public {
         Survey memory s = Survey(
             msg.sender,
             publicKey,
@@ -229,6 +261,11 @@ contract ReviewNetwork is Ownable {
         require(survey.status == SurveyStatus.IN_PROGRESS);
         require(keccak256(surveys[surveyJsonHash].answers[msg.sender].answersJsonHash) == keccak256(""));
 
+        surveys[surveyJsonHash].answers[msg.sender] = Answer(answersJsonHash);
+        require(token.transfer(msg.sender, survey.rewardPerSurvey));
+        surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
+        emit LogSurveyAnswered(msg.sender, surveyJsonHash, answersJsonHash, survey.title, survey.rewardPerSurvey);
+
         if (survey.funds < survey.rewardPerSurvey) {
             surveys[surveyJsonHash].status = SurveyStatus.COMPLETED;
             emit LogSurveyCompleted(
@@ -239,16 +276,7 @@ contract ReviewNetwork is Ownable {
                 survey.rewardPerSurvey,
                 survey.maxAnswers
             );
-
-            return false;
         }
-
-        surveys[surveyJsonHash].answers[msg.sender] = Answer(answersJsonHash);
-        require(token.transfer(msg.sender, survey.rewardPerSurvey));
-        surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
-        emit LogSurveyAnswered(msg.sender, surveyJsonHash, answersJsonHash, survey.title, survey.rewardPerSurvey);
-
-        return true;
     }
 
     function isSurveyAnsweredBy(string surveyJsonHash, address user) public view returns (bool) {
@@ -276,6 +304,8 @@ contract ReviewNetwork is Ownable {
     function createProduct (
         address productAddress,
         address brandAddress,
+        uint categoryId,
+        uint subcategoryId,
         string name,
         string image,
         string metaJsonHash
@@ -285,6 +315,8 @@ contract ReviewNetwork is Ownable {
         Product memory product = Product({
             addedBy: msg.sender,
             brand: brand,
+            categoryId: categoryId,
+            subcategoryId: subcategoryId,
             name: name,
             image: image,
             metaJsonHash: metaJsonHash
@@ -292,30 +324,137 @@ contract ReviewNetwork is Ownable {
 
         products[brandAddress] = product;
 
-        emit LogProductAdded(productAddress, brandAddress, name, image, metaJsonHash);
+        emit LogProductAdded(productAddress, brandAddress, categoryId, subcategoryId, name, image, metaJsonHash);
+    }
+
+    function registerUser (string username) public {
+        require(keccak256(username) != keccak256(""), "Username can't be empty");
+        User memory user = User({ username: username });
+        users[msg.sender] = user;
+    }
+
+    function userExists (address userAddress) public view returns (bool) {
+        return keccak256(users[userAddress].username) != keccak256("");
     }
 
     function createReview (
         address reviewAddress,
-        address authorAddress,
         address productAddress,
         uint score,
         string metaJsonHash
     ) public {
-        require(score >= 1 && score <= 4);
+        require(score >= 1 && score <= 4, "Score must be between 1 and 4");
 
-        User memory author = users[authorAddress];
+        User memory author = users[msg.sender];
+        require(keccak256(author.username) != keccak256(""), "You are not registered as a user. Please register first!");
+
         Product memory product = products[productAddress];
 
         Review memory review = Review({
             author: author,
             product: product,
             score: score,
-            metaJsonHash: metaJsonHash
+            metaJsonHash: metaJsonHash,
+            status: ReviewStatus.PENDING,
+            chosenValidators: choseValidators(msg.sender)
         });
 
         reviews[reviewAddress] = review;
 
-        emit LogReviewAdded(reviewAddress, authorAddress, productAddress);
+        for (uint index = 0; index < review.chosenValidators.length; index++) {
+            emit LogValidatorChosen(reviewAddress, review.chosenValidators[index]);
+        }
+
+        emit LogReviewAdded(reviewAddress, msg.sender, productAddress, metaJsonHash);
+    }
+
+    function getReviewStatus(address reviewAddress) public view returns (ReviewStatus) {
+        return reviews[reviewAddress].status;
+    }
+
+    function isValidatorChosenForReview (address reviewAddress, address validator) public view returns (bool) {
+        Review memory review = reviews[reviewAddress];
+        
+        bool isValidatorChosen = false;
+        for (uint index = 0; index < review.chosenValidators.length; index++) {
+            if (review.chosenValidators[index] == validator) {
+                isValidatorChosen = true;
+            }
+        }
+
+        return isValidatorChosen;
+    }
+
+    function validatorVote(address reviewAddress, int vote) public {
+        Review storage review = reviews[reviewAddress];
+
+        require(review.status == ReviewStatus.PENDING, "Review already validated.");
+        require(reviews[reviewAddress].validationVotes[msg.sender] == 0, "You already voted on this review.");
+        require(isValidatorChosenForReview(reviewAddress, msg.sender), "You are not chosen to validate this review.");
+        require(vote == -1 || vote == 1, "Vote must be -1 or 1.");
+
+        reviews[reviewAddress].validationVotes[msg.sender] = vote;
+
+        bool everyoneVoted = true;
+        int tally = 0;
+
+        for (uint index = 0; index < NUMBER_OF_VALIDATORS; index++) {
+            tally += review.validationVotes[review.chosenValidators[index]];
+
+            if (review.validationVotes[review.chosenValidators[index]] == 0) {
+                everyoneVoted = false;
+            }
+        }
+
+        if (everyoneVoted) {
+            if (tally > 0) {
+                reviews[reviewAddress].status = ReviewStatus.APPROVED;
+                emit LogReviewApproved(reviewAddress);
+            } else {
+                reviews[reviewAddress].status = ReviewStatus.REJECTED;
+                emit LogReviewRejected(reviewAddress);
+            }
+        }
+    }
+
+    function addValidator(address validatorAddress) public onlyOwner {
+        validators.push(validatorAddress);
+
+        emit LogValidatorAdded(validatorAddress);
+    }
+
+    function choseValidators(address author) public view returns (address[]) {
+        require(validators.length >= NUMBER_OF_VALIDATORS, "Not enough validators in the system!");
+
+        uint a = uint256(author);
+        bytes32 b = blockhash(block.number);
+        uint r = uint(keccak256(abi.encodePacked(a, b)));
+        uint point = r % validators.length;
+
+        address[] memory chosenOnes = new address[](NUMBER_OF_VALIDATORS);
+
+        uint counter = 0;
+        uint index = 1;
+
+        while(counter < NUMBER_OF_VALIDATORS) {
+            address chosenValidator = validators[(point + index) % validators.length];
+
+            bool alreadyPicked = false;
+            for(uint i = 0; i < chosenOnes.length; i++) {
+                if (chosenOnes[i] == chosenValidator) {
+                    alreadyPicked = true;
+                } 
+            }
+
+            if (!alreadyPicked) {
+                chosenOnes[counter] = chosenValidator;
+                counter++;
+            }
+
+            index++;
+
+        }
+
+        return chosenOnes;
     }
 }

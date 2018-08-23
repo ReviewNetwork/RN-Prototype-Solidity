@@ -16,9 +16,10 @@ contract('SurveyTest', function (accounts) {
         let hash = 'QmWmyoMoctfbAaiEs2G46gpeUmhqFRDW6KWo64y5r581Vz'
         let title = 'Cats or dogs?'
         let reward = 5
+        let maxAnswers = 10
 
         try {
-            let tx = await rn.createSurvey(pubKey, title, hash, reward, { from: accounts[0] })
+            let tx = await rn.createSurvey(pubKey, title, hash, reward, maxAnswers, { from: accounts[0] })
             truffleAssert.eventEmitted(tx, 'LogSurveyAdded')
 
             let status = await rn.getSurveyStatus.call(hash)
@@ -38,9 +39,10 @@ contract('SurveyTest', function (accounts) {
         let hash = 'QmWmyoMoctfbAaiEs2G46gpeUmhqFRDW6KWo64y5r581Vz'
         let title = 'Cats or dogs?'
         let reward = 5
+        let maxAnswers = 10
 
         try {
-            await rn.createSurvey(pubKey, title, hash, reward, { from: accounts[0] })
+            await rn.createSurvey(pubKey, title, hash, reward, maxAnswers, { from: accounts[0] })
             tx = await rew.approve(rn.address, 2500)
             truffleAssert.eventEmitted(tx, 'Approval')
             tx = await rn.fundSurvey(hash, 2500, { from: accounts[0] })
@@ -59,9 +61,10 @@ contract('SurveyTest', function (accounts) {
         let hash = 'QmWmyoMoctfbAaiEs2G46gpeUmhqFRDW6KWo64y5r581Vz'
         let title = 'Cats or dogs?'
         let reward = 5
+        let maxAnswers = 10
 
         try {
-            await rn.createSurvey(pubKey, title, hash, reward, { from: accounts[0] })
+            await rn.createSurvey(pubKey, title, hash, reward, maxAnswers, { from: accounts[0] })
             await rew.approve(rn.address, 2500)
             await rn.fundSurvey(hash, 2500, { from: accounts[0] })
             let tx = await rn.startSurvey(hash, { from: accounts[0] })
@@ -81,9 +84,10 @@ contract('SurveyTest', function (accounts) {
         let hash = 'QmWmyoMoctfbAaiEs2G46gpeUmhqFRDW6KWo64y5r581Vz'
         let title = 'Cats or dogs?'
         let reward = 5
+        let maxAnswers = 10
 
         try {
-            await rn.createSurvey(pubKey, title, hash, reward, { from: accounts[0] })
+            await rn.createSurvey(pubKey, title, hash, reward, maxAnswers, { from: accounts[0] })
             await rew.approve(rn.address, 2500)
             await rn.fundSurvey(hash, 2500, { from: accounts[0] })
             await rn.startSurvey(hash, { from: accounts[0] })
@@ -105,10 +109,11 @@ contract('SurveyTest', function (accounts) {
         let hash = 'QmWmyoMoctfbAaiEs2G46gpeUmhqFRDW6KWo64y5r581Vz'
         let title = 'Cats or dogs?'
         let reward = 5
+        let maxAnswers = 10
         let answerHash = 'QmWmyoMoctfbAaiEs2G46gpeUmhqFRDW6KWo64y5r581Vz'
 
         try {
-            await rn.createSurvey(pubKey, title, hash, reward, { from: accounts[0] })
+            await rn.createSurvey(pubKey, title, hash, reward, maxAnswers, { from: accounts[0] })
             await rew.approve(rn.address, 2500)
             await rn.fundSurvey(hash, 2500, { from: accounts[0] })
             await rn.startSurvey(hash, { from: accounts[0] })

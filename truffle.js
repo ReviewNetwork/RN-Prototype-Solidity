@@ -25,14 +25,13 @@ module.exports = {
       network_id: 4,
       provider: function() {
         return new PrivateKeyProvider(privateKey, `https://rinkeby.infura.io/${infuraToken}`)
+      }
+    },
+    kovan: {
+      network_id: '42',
+      provider: function() {
+        return new PrivateKeyProvider(privateKey, `https://kovan.infura.io/${infuraToken}`)
       },
-      gas: 4612388
     }
-  },
-  // rpc: {
-	// 	host: "localhost",
-	// 	gas: 7712388,
-	// 	port: 9545
-	// },
-  // solc: { optimizer: { enabled: true, runs: 200 } }
+  }
 };
