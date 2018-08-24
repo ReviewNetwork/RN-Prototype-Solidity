@@ -41,6 +41,7 @@ contract ReviewNetwork is Ownable {
         uint subcategoryId;
         string name;
         string image;
+        string description;
         string metaJsonHash;
     }
 
@@ -126,6 +127,7 @@ contract ReviewNetwork is Ownable {
         uint indexed subcategoryId,
         string name,
         string image,
+        string description,
         string metaHashJson
     );
 
@@ -308,6 +310,7 @@ contract ReviewNetwork is Ownable {
         uint subcategoryId,
         string name,
         string image,
+        string description,
         string metaJsonHash
     ) public onlyOwner {
         Brand memory brand = brands[brandAddress];
@@ -319,12 +322,13 @@ contract ReviewNetwork is Ownable {
             subcategoryId: subcategoryId,
             name: name,
             image: image,
+            description: description,
             metaJsonHash: metaJsonHash
         });
 
         products[brandAddress] = product;
 
-        emit LogProductAdded(productAddress, brandAddress, categoryId, subcategoryId, name, image, metaJsonHash);
+        emit LogProductAdded(productAddress, brandAddress, categoryId, subcategoryId, name, image, description, metaJsonHash);
     }
 
     function registerUser (string username) public {
@@ -422,6 +426,12 @@ contract ReviewNetwork is Ownable {
     }
 
     function addValidator(address validatorAddress) public onlyOwner {
+        bool validatorExists = false;
+        for(uint i = 0; i < validators.length; i++) {
+            validatorExists = validatorAddress == validators[i];
+        }
+        
+        require(!validatorExists, "Validator already exists");
         validators.push(validatorAddress);
 
         emit LogValidatorAdded(validatorAddress);
