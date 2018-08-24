@@ -333,6 +333,10 @@ contract ReviewNetwork is Ownable {
         users[msg.sender] = user;
     }
 
+    function getUsername (address user) public view returns(string) {
+        return users[user].username;
+    }
+
     function userExists (address userAddress) public view returns (bool) {
         return keccak256(users[userAddress].username) != keccak256("");
     }
