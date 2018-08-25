@@ -134,10 +134,12 @@ contract ReviewNetwork is Ownable {
     );
 
     event LogReviewApproved(
+        address indexed productAddress,
         address indexed reviewAddress
     );
 
     event LogReviewRejected(
+        address indexed productAddress,
         address indexed reviewAddress
     );
 
@@ -400,10 +402,10 @@ contract ReviewNetwork is Ownable {
         if (everyoneVoted) {
             if (tally > 0) {
                 reviews[reviewAddress].status = ReviewStatus.APPROVED;
-                emit LogReviewApproved(reviewAddress);
+                emit LogReviewApproved(review.productAddress, reviewAddress);
             } else {
                 reviews[reviewAddress].status = ReviewStatus.REJECTED;
-                emit LogReviewRejected(reviewAddress);
+                emit LogReviewRejected(review.productAddress, reviewAddress);
             }
         }
     }
