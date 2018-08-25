@@ -6,7 +6,7 @@ import "zeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract ReviewNetwork is Ownable {
     REWToken token;
-    uint constant NUMBER_OF_VALIDATORS = 7;
+    uint constant NUMBER_OF_VALIDATORS = 3;
 
     enum SurveyStatus { IDLE, FUNDED, IN_PROGRESS, COMPLETED }
     enum ReviewStatus { PENDING, APPROVED, REJECTED }
@@ -53,10 +53,13 @@ contract ReviewNetwork is Ownable {
         User author;
         Product product;
         uint score;
+        uint upvotes;
+        uint downvotes;
         string metaJsonHash;
         ReviewStatus status;
         address[] chosenValidators;
         mapping (address => int) validationVotes;
+        mapping (address => bool) userVotes;
     }
 
     /**
@@ -337,7 +340,7 @@ contract ReviewNetwork is Ownable {
         users[msg.sender] = user;
     }
 
-    function getUsername (address user) public view returns(string) {
+    function getUsername (address user) public view returns (string) {
         return users[user].username;
     }
 
@@ -362,6 +365,8 @@ contract ReviewNetwork is Ownable {
             author: author,
             product: product,
             score: score,
+            upvotes: 0,
+            downvotes: 0,
             metaJsonHash: metaJsonHash,
             status: ReviewStatus.PENDING,
             chosenValidators: choseValidators(msg.sender)
@@ -374,6 +379,28 @@ contract ReviewNetwork is Ownable {
         }
 
         emit LogReviewAdded(reviewAddress, msg.sender, productAddress, metaJsonHash);
+    }
+
+    function upvoteReview (address reviewAddress) public {
+        require(reviews[reviewAddress].userVotes[msg.sender] == false, "You already voted on this review.");
+
+        reviews[reviewAddress].userVotes[msg.sender] = true;
+        reviews[reviewAddress].upvotes[msg.sender] += 1;
+    }
+    
+    function downvoteReview (address reviewAddress) public {
+        require(reviews[reviewAddress].userVotes[msg.sender] == false, "You already voted on this review.");
+
+        reviews[reviewAddress].userVotes[msg.sender] = true;
+        reviews[reviewAddress].downvotes[msg.sender] += 1;
+    }
+
+    function didUserVoteForReview (address reviewAddress) public view returns (bool) {
+        return reviews[reviewAddress].userVotes[msg.sender];
+    }
+
+    function getReviewVotes (address reviewAddress) public view returns (uint upvotes, uint downvotes) {
+        return (reviews[reviewAddress].upvotes, reviews[reviewAddress].downvotes);
     }
 
     function getReviewStatus(address reviewAddress) public view returns (ReviewStatus) {
@@ -441,7 +468,7 @@ contract ReviewNetwork is Ownable {
         require(validators.length >= NUMBER_OF_VALIDATORS, "Not enough validators in the system!");
 
         uint a = uint256(author);
-        bytes32 b = blockhash(block.number);
+        bytes32 b = bytes32(block.timestamp);
         uint r = uint(keccak256(abi.encodePacked(a, b)));
         uint point = r % validators.length;
 
