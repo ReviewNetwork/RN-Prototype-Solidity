@@ -11,6 +11,10 @@ contract ReviewNetwork is Ownable {
     enum SurveyStatus { IDLE, FUNDED, IN_PROGRESS, COMPLETED }
     enum ReviewStatus { PENDING, APPROVED, REJECTED }
 
+    struct User {
+        string username;
+    }
+
     struct Answer {
         string answersJsonHash;
     }
@@ -27,26 +31,14 @@ contract ReviewNetwork is Ownable {
         mapping (address => Answer) answers;
     }
 
-    struct Brand {
-        address addedBy;
-        string name;
-        string logo;
-        string metaJsonHash;
-    }
-
     struct Product {
         address addedBy;
-        Brand brand;
         uint categoryId;
         uint subcategoryId;
         string name;
         string image;
         string description;
         string metaJsonHash;
-    }
-
-    struct User {
-        string username;
     }
 
     struct Review {
@@ -66,7 +58,6 @@ contract ReviewNetwork is Ownable {
      * key: string - Survey JSON IPFS hash
      */
     mapping (string => Survey) surveys;
-    mapping (address => Brand) brands;
     mapping (address => Product) products;
     mapping (address => User) users;
     mapping (address => Review) reviews;
@@ -116,16 +107,8 @@ contract ReviewNetwork is Ownable {
         uint rewardPerSurvey
     );
 
-    event LogBrandAdded(
-        address indexed brandAddress,
-        string name,
-        string logo,
-        string metaHashJson
-    );
-
     event LogProductAdded(
         address productAddress,
-        address indexed brandAddress,
         uint indexed categoryId,
         uint indexed subcategoryId,
         string name,
@@ -288,27 +271,8 @@ contract ReviewNetwork is Ownable {
         return keccak256(bytes(surveys[surveyJsonHash].answers[user].answersJsonHash)) != keccak256("");
     }
 
-    function createBrand (
-        address brandAddress,
-        string name,
-        string logo,
-        string metaJsonHash
-    ) public onlyOwner {
-        Brand memory brand = Brand({
-            addedBy: msg.sender,
-            name: name,
-            logo: logo,
-            metaJsonHash: metaJsonHash
-        });
-
-        brands[brandAddress] = brand;
-
-        emit LogBrandAdded(brandAddress, name, logo, metaJsonHash);
-    }
-
     function createProduct (
         address productAddress,
-        address brandAddress,
         uint categoryId,
         uint subcategoryId,
         string name,
@@ -316,11 +280,8 @@ contract ReviewNetwork is Ownable {
         string description,
         string metaJsonHash
     ) public onlyOwner {
-        Brand memory brand = brands[brandAddress];
-
         Product memory product = Product({
             addedBy: msg.sender,
-            brand: brand,
             categoryId: categoryId,
             subcategoryId: subcategoryId,
             name: name,
@@ -329,9 +290,9 @@ contract ReviewNetwork is Ownable {
             metaJsonHash: metaJsonHash
         });
 
-        products[brandAddress] = product;
+        products[productAddress] = product;
 
-        emit LogProductAdded(productAddress, brandAddress, categoryId, subcategoryId, name, image, description, metaJsonHash);
+        emit LogProductAdded(productAddress, categoryId, subcategoryId, name, image, description, metaJsonHash);
     }
 
     function registerUser (string username) public {
@@ -381,22 +342,17 @@ contract ReviewNetwork is Ownable {
         emit LogReviewAdded(reviewAddress, msg.sender, productAddress, metaJsonHash);
     }
 
-    function upvoteReview (address reviewAddress) public {
+    function voteReview (address reviewAddress, int vote) public {
+        require(vote == 1 || vote == -1, "Vote must be either 1 or -1.");
         require(reviews[reviewAddress].userVotes[msg.sender] == false, "You already voted on this review.");
 
         reviews[reviewAddress].userVotes[msg.sender] = true;
-        reviews[reviewAddress].upvotes[msg.sender] += 1;
-    }
-    
-    function downvoteReview (address reviewAddress) public {
-        require(reviews[reviewAddress].userVotes[msg.sender] == false, "You already voted on this review.");
 
-        reviews[reviewAddress].userVotes[msg.sender] = true;
-        reviews[reviewAddress].downvotes[msg.sender] += 1;
-    }
-
-    function didUserVoteForReview (address reviewAddress) public view returns (bool) {
-        return reviews[reviewAddress].userVotes[msg.sender];
+        if (vote == 1) {
+            reviews[reviewAddress].upvotes += 1;
+        } else if (vote == -1) {
+            reviews[reviewAddress].downvotes += 1;
+        }
     }
 
     function getReviewVotes (address reviewAddress) public view returns (uint upvotes, uint downvotes) {
@@ -455,7 +411,9 @@ contract ReviewNetwork is Ownable {
     function addValidator(address validatorAddress) public onlyOwner {
         bool validatorExists = false;
         for(uint i = 0; i < validators.length; i++) {
-            validatorExists = validatorAddress == validators[i];
+            if (validatorAddress == validators[i]) {
+                validatorExists = true;
+            }
         }
         
         require(!validatorExists, "Validator already exists");

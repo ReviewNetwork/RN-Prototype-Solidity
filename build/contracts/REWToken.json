@@ -316,7 +316,7 @@
         "id": 2,
         "nodeType": "ImportDirective",
         "scope": 40,
-        "sourceUnit": 1890,
+        "sourceUnit": 1956,
         "src": "26:67:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -330,10 +330,10 @@
               "id": 3,
               "name": "StandardToken",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1889,
+              "referencedDeclaration": 1955,
               "src": "116:13:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StandardToken_$1889",
+                "typeIdentifier": "t_contract$_StandardToken_$1955",
                 "typeString": "contract StandardToken"
               }
             },
@@ -343,10 +343,10 @@
           }
         ],
         "contractDependencies": [
-          1568,
-          1611,
-          1643,
-          1889
+          1634,
+          1677,
+          1709,
+          1955
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -354,10 +354,10 @@
         "id": 39,
         "linearizedBaseContracts": [
           39,
-          1889,
-          1568,
-          1611,
-          1643
+          1955,
+          1634,
+          1677,
+          1709
         ],
         "name": "REWToken",
         "nodeType": "ContractDefinition",
@@ -678,7 +678,7 @@
                       "name": "totalSupply_",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1487,
+                      "referencedDeclaration": 1553,
                       "src": "346:12:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -726,7 +726,7 @@
                         "name": "balances",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1485,
+                        "referencedDeclaration": 1551,
                         "src": "385:8:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
@@ -742,7 +742,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1904,
+                          "referencedDeclaration": 1970,
                           "src": "394:3:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -862,7 +862,7 @@
         "id": 2,
         "nodeType": "ImportDirective",
         "scope": 40,
-        "sourceUnit": 1890,
+        "sourceUnit": 1956,
         "src": "26:67:0",
         "symbolAliases": [],
         "unitAlias": ""
@@ -876,10 +876,10 @@
               "id": 3,
               "name": "StandardToken",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 1889,
+              "referencedDeclaration": 1955,
               "src": "116:13:0",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_StandardToken_$1889",
+                "typeIdentifier": "t_contract$_StandardToken_$1955",
                 "typeString": "contract StandardToken"
               }
             },
@@ -889,10 +889,10 @@
           }
         ],
         "contractDependencies": [
-          1568,
-          1611,
-          1643,
-          1889
+          1634,
+          1677,
+          1709,
+          1955
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -900,10 +900,10 @@
         "id": 39,
         "linearizedBaseContracts": [
           39,
-          1889,
-          1568,
-          1611,
-          1643
+          1955,
+          1634,
+          1677,
+          1709
         ],
         "name": "REWToken",
         "nodeType": "ContractDefinition",
@@ -1224,7 +1224,7 @@
                       "name": "totalSupply_",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 1487,
+                      "referencedDeclaration": 1553,
                       "src": "346:12:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -1272,7 +1272,7 @@
                         "name": "balances",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 1485,
+                        "referencedDeclaration": 1551,
                         "src": "385:8:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_mapping$_t_address_$_t_uint256_$",
@@ -1288,7 +1288,7 @@
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1904,
+                          "referencedDeclaration": 1970,
                           "src": "394:3:0",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
@@ -1389,10 +1389,10 @@
     "4": {
       "events": {},
       "links": {},
-      "address": "0x3fe947cb2dee95ac1e9e32c5a40fc7b0741ba50a",
-      "transactionHash": "0xa2c26c12a5994e512836158a894de386c781c2d2cf068c964917cf96914fe7e8"
+      "address": "0x72a5f0c85013d759f2ec239854b8b5e0dc9d5e7d",
+      "transactionHash": "0x370195882578a6406bfc3e6e3d2199eeaec5b12853d47df82fe80a82863ab18d"
     }
   },
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-08-24T16:01:40.026Z"
+  "updatedAt": "2018-08-25T20:46:17.427Z"
 }
