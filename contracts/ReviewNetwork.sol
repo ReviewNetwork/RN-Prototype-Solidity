@@ -32,6 +32,7 @@ contract ReviewNetwork is Ownable {
     }
 
     struct Product {
+        address productAddress;
         address addedBy;
         uint categoryId;
         uint subcategoryId;
@@ -283,6 +284,7 @@ contract ReviewNetwork is Ownable {
         string metaJsonHash
     ) public onlyOwner {
         Product memory product = Product({
+            productAddress: productAddress,
             addedBy: msg.sender,
             categoryId: categoryId,
             subcategoryId: subcategoryId,
@@ -402,10 +404,10 @@ contract ReviewNetwork is Ownable {
         if (everyoneVoted) {
             if (tally > 0) {
                 reviews[reviewAddress].status = ReviewStatus.APPROVED;
-                emit LogReviewApproved(review.productAddress, reviewAddress);
+                emit LogReviewApproved(review.product.productAddress, reviewAddress);
             } else {
                 reviews[reviewAddress].status = ReviewStatus.REJECTED;
-                emit LogReviewRejected(review.productAddress, reviewAddress);
+                emit LogReviewRejected(review.product.productAddress, reviewAddress);
             }
         }
     }
