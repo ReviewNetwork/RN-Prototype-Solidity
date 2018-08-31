@@ -26,8 +26,10 @@ contract ReviewNetwork is Ownable {
         string surveyJsonHash;
         uint rewardPerSurvey;
         uint funds;
+        uint currentAnswers;
         uint maxAnswers;
         SurveyStatus status;
+        bool suspended;
         mapping (address => Answer) answers;
     }
 
@@ -162,8 +164,10 @@ contract ReviewNetwork is Ownable {
             surveyJsonHash,
             rewardPerSurvey,
             0,
+            0,
             maxAnswers,
-            SurveyStatus.IDLE
+            SurveyStatus.IDLE,
+            false
         );
 
         surveys[surveyJsonHash] = s;
@@ -176,6 +180,14 @@ contract ReviewNetwork is Ownable {
             rewardPerSurvey,
             maxAnswers
         );
+    }
+
+    function suspendSurvey (string surveyJsonHash) public onlyOwner {
+        surveys[surveyJsonHash].suspended = true;
+    }
+
+    function isSurveySuspended (string surveyJsonHash) public view returns (bool) {
+        return surveys[surveyJsonHash].suspended;
     }
 
     function fundSurvey(string surveyJsonHash, uint amount) public {
@@ -247,12 +259,14 @@ contract ReviewNetwork is Ownable {
 
     function answerSurvey(string surveyJsonHash, string answersJsonHash) public returns (bool) {
         Survey memory survey = surveys[surveyJsonHash];
+        require(survey.currentAnswers < survey.maxAnswers, "Maxium number of answers reached");
         require(keccak256(bytes(answersJsonHash)) != keccak256(""));
         require(keccak256(bytes(surveyJsonHash)) != keccak256(""));
         require(survey.status == SurveyStatus.IN_PROGRESS);
         require(keccak256(surveys[surveyJsonHash].answers[msg.sender].answersJsonHash) == keccak256(""));
 
         surveys[surveyJsonHash].answers[msg.sender] = Answer(answersJsonHash);
+        surveys[surveyJsonHash].currentAnswers += 1;
         require(token.transfer(msg.sender, survey.rewardPerSurvey));
         surveys[surveyJsonHash].funds -= surveys[surveyJsonHash].rewardPerSurvey;
         emit LogSurveyAnswered(msg.sender, surveyJsonHash, answersJsonHash, survey.title, survey.rewardPerSurvey);
