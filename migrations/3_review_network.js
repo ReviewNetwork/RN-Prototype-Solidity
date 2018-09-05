@@ -1,8 +1,8 @@
 const fs = require('fs')
 
-var REWToken = artifacts.require("./REWToken.sol");
-var ReviewNetwork = artifacts.require("./ReviewNetwork.sol");
+// var REWToken = artifacts.require("./REWToken.sol");
+var RNDelegate = artifacts.require("./RNDelegate.sol");
 
 module.exports = async function(deployer) {
-  await deployer.deploy(ReviewNetwork, REWToken.address);
+  await deployer.deploy(RNDelegate);
 };

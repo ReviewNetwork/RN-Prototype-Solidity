@@ -1,0 +1,2729 @@
+{
+  "contractName": "RNStorage",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a723058205f975bb22053d650792404ed811f8c352883cf923b80e96cc44af589297707ce0029",
+  "deployedBytecode": "0x6080604052600080fd00a165627a7a723058205f975bb22053d650792404ed811f8c352883cf923b80e96cc44af589297707ce0029",
+  "sourceMap": "112:1577:2:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;112:1577:2;;;;;;;",
+  "deployedSourceMap": "112:1577:2:-;;;;;",
+  "source": "pragma solidity ^0.4.24;\n\nimport \"zeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"./REWToken.sol\";\n\ncontract RNStorage {\n    /**\n     * Enums\n     */\n\n    enum SurveyStatus { IDLE, FUNDED, IN_PROGRESS, COMPLETED }\n    enum ReviewStatus { PENDING, APPROVED, REJECTED }\n\n    /**\n     * Structs\n     */\n\n    struct User {\n        string username;\n    }\n\n    struct Answer {\n        string answersJsonHash;\n    }\n\n    struct Survey {\n        address creator;\n        string publicKey;\n        string title;\n        string surveyJsonHash;\n        uint rewardPerSurvey;\n        uint funds;\n        uint currentAnswers;\n        uint maxAnswers;\n        SurveyStatus status;\n        bool suspended;\n        mapping (address => Answer) answers;\n    }\n\n    struct Product {\n        address productAddress;\n        address addedBy;\n        uint categoryId;\n        uint subcategoryId;\n        string name;\n        string image;\n        string description;\n        string metaJsonHash;\n    }\n\n    struct Review {\n        User author;\n        Product product;\n        uint score;\n        uint upvotes;\n        uint downvotes;\n        string metaJsonHash;\n        ReviewStatus status;\n        address[] chosenValidators;\n        mapping (address => int) validationVotes;\n        mapping (address => bool) userVotes;\n    }\n\n    /**\n     * Constants\n     */\n\n    uint constant NUMBER_OF_VALIDATORS = 3;\n\n    /**\n     * Variables\n     */\n\n    REWToken token;\n\n    /* key: string - Survey JSON IPFS hash */\n    mapping (string => Survey) surveys;\n    mapping (address => Product) products;\n    mapping (address => User) users;\n    mapping (address => Review) reviews;\n    address[] validators;\n}\n",
+  "sourcePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/RNStorage.sol",
+  "ast": {
+    "absolutePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/RNStorage.sol",
+    "exportedSymbols": {
+      "RNStorage": [
+        1448
+      ]
+    },
+    "id": 1449,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1338,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "absolutePath": "zeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "zeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 1339,
+        "nodeType": "ImportDirective",
+        "scope": 1449,
+        "sourceUnit": 1629,
+        "src": "26:59:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/REWToken.sol",
+        "file": "./REWToken.sol",
+        "id": 1340,
+        "nodeType": "ImportDirective",
+        "scope": 1449,
+        "sourceUnit": 40,
+        "src": "86:24:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 1448,
+        "linearizedBaseContracts": [
+          1448
+        ],
+        "name": "RNStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "RNStorage.SurveyStatus",
+            "id": 1345,
+            "members": [
+              {
+                "id": 1341,
+                "name": "IDLE",
+                "nodeType": "EnumValue",
+                "src": "187:4:2"
+              },
+              {
+                "id": 1342,
+                "name": "FUNDED",
+                "nodeType": "EnumValue",
+                "src": "193:6:2"
+              },
+              {
+                "id": 1343,
+                "name": "IN_PROGRESS",
+                "nodeType": "EnumValue",
+                "src": "201:11:2"
+              },
+              {
+                "id": 1344,
+                "name": "COMPLETED",
+                "nodeType": "EnumValue",
+                "src": "214:9:2"
+              }
+            ],
+            "name": "SurveyStatus",
+            "nodeType": "EnumDefinition",
+            "src": "167:58:2"
+          },
+          {
+            "canonicalName": "RNStorage.ReviewStatus",
+            "id": 1349,
+            "members": [
+              {
+                "id": 1346,
+                "name": "PENDING",
+                "nodeType": "EnumValue",
+                "src": "250:7:2"
+              },
+              {
+                "id": 1347,
+                "name": "APPROVED",
+                "nodeType": "EnumValue",
+                "src": "259:8:2"
+              },
+              {
+                "id": 1348,
+                "name": "REJECTED",
+                "nodeType": "EnumValue",
+                "src": "269:8:2"
+              }
+            ],
+            "name": "ReviewStatus",
+            "nodeType": "EnumDefinition",
+            "src": "230:49:2"
+          },
+          {
+            "canonicalName": "RNStorage.User",
+            "id": 1352,
+            "members": [
+              {
+                "constant": false,
+                "id": 1351,
+                "name": "username",
+                "nodeType": "VariableDeclaration",
+                "scope": 1352,
+                "src": "339:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1350,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "339:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "User",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "317:44:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "RNStorage.Answer",
+            "id": 1355,
+            "members": [
+              {
+                "constant": false,
+                "id": 1354,
+                "name": "answersJsonHash",
+                "nodeType": "VariableDeclaration",
+                "scope": 1355,
+                "src": "391:22:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1353,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "391:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Answer",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "367:53:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "RNStorage.Survey",
+            "id": 1380,
+            "members": [
+              {
+                "constant": false,
+                "id": 1357,
+                "name": "creator",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "450:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1356,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "450:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1359,
+                "name": "publicKey",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "475:16:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1358,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "475:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1361,
+                "name": "title",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "501:12:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1360,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "501:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1363,
+                "name": "surveyJsonHash",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "523:21:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1362,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "523:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1365,
+                "name": "rewardPerSurvey",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "554:20:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1364,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "554:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1367,
+                "name": "funds",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "584:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1366,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "584:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1369,
+                "name": "currentAnswers",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "604:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1368,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "604:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1371,
+                "name": "maxAnswers",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "633:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1370,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "633:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1373,
+                "name": "status",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "658:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_SurveyStatus_$1345",
+                  "typeString": "enum RNStorage.SurveyStatus"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 1372,
+                  "name": "SurveyStatus",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 1345,
+                  "src": "658:12:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_SurveyStatus_$1345",
+                    "typeString": "enum RNStorage.SurveyStatus"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1375,
+                "name": "suspended",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "687:14:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 1374,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "687:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1379,
+                "name": "answers",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "711:35:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1355_storage_$",
+                  "typeString": "mapping(address => struct RNStorage.Answer)"
+                },
+                "typeName": {
+                  "id": 1378,
+                  "keyType": {
+                    "id": 1376,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "720:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "711:27:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1355_storage_$",
+                    "typeString": "mapping(address => struct RNStorage.Answer)"
+                  },
+                  "valueType": {
+                    "contractScope": null,
+                    "id": 1377,
+                    "name": "Answer",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 1355,
+                    "src": "731:6:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Answer_$1355_storage_ptr",
+                      "typeString": "struct RNStorage.Answer"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Survey",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "426:327:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "RNStorage.Product",
+            "id": 1397,
+            "members": [
+              {
+                "constant": false,
+                "id": 1382,
+                "name": "productAddress",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "784:22:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1381,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "784:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1384,
+                "name": "addedBy",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "816:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1383,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "816:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1386,
+                "name": "categoryId",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "841:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1385,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "841:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1388,
+                "name": "subcategoryId",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "866:18:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1387,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "866:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1390,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "894:11:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1389,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "894:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1392,
+                "name": "image",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "915:12:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1391,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "915:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1394,
+                "name": "description",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "937:18:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1393,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "937:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1396,
+                "name": "metaJsonHash",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "965:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1395,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "965:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Product",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "759:232:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "RNStorage.Review",
+            "id": 1423,
+            "members": [
+              {
+                "constant": false,
+                "id": 1399,
+                "name": "author",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1021:11:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                  "typeString": "struct RNStorage.User"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 1398,
+                  "name": "User",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 1352,
+                  "src": "1021:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                    "typeString": "struct RNStorage.User"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1401,
+                "name": "product",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1042:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                  "typeString": "struct RNStorage.Product"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 1400,
+                  "name": "Product",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 1397,
+                  "src": "1042:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                    "typeString": "struct RNStorage.Product"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1403,
+                "name": "score",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1067:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1402,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1067:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1405,
+                "name": "upvotes",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1087:12:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1404,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1087:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1407,
+                "name": "downvotes",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1109:14:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1406,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1109:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1409,
+                "name": "metaJsonHash",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1133:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1408,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1133:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1411,
+                "name": "status",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1162:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_ReviewStatus_$1349",
+                  "typeString": "enum RNStorage.ReviewStatus"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 1410,
+                  "name": "ReviewStatus",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 1349,
+                  "src": "1162:12:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_ReviewStatus_$1349",
+                    "typeString": "enum RNStorage.ReviewStatus"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1414,
+                "name": "chosenValidators",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1191:26:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                  "typeString": "address[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 1412,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1191:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 1413,
+                  "length": null,
+                  "nodeType": "ArrayTypeName",
+                  "src": "1191:9:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                    "typeString": "address[]"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1418,
+                "name": "validationVotes",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1227:40:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_int256_$",
+                  "typeString": "mapping(address => int256)"
+                },
+                "typeName": {
+                  "id": 1417,
+                  "keyType": {
+                    "id": 1415,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1236:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "1227:24:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_int256_$",
+                    "typeString": "mapping(address => int256)"
+                  },
+                  "valueType": {
+                    "id": 1416,
+                    "name": "int",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1247:3:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1422,
+                "name": "userVotes",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1277:35:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
+                  "typeString": "mapping(address => bool)"
+                },
+                "typeName": {
+                  "id": 1421,
+                  "keyType": {
+                    "id": 1419,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1286:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "1277:25:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
+                    "typeString": "mapping(address => bool)"
+                  },
+                  "valueType": {
+                    "id": 1420,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1297:4:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Review",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "997:322:2",
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "id": 1426,
+            "name": "NUMBER_OF_VALIDATORS",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1359:38:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1424,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1359:4:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "33",
+              "id": 1425,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1396:1:2",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3_by_1",
+                "typeString": "int_const 3"
+              },
+              "value": "3"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1428,
+            "name": "token",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1438:14:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_REWToken_$39",
+              "typeString": "contract REWToken"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 1427,
+              "name": "REWToken",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 39,
+              "src": "1438:8:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_REWToken_$39",
+                "typeString": "contract REWToken"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1432,
+            "name": "surveys",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1505:34:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1380_storage_$",
+              "typeString": "mapping(string => struct RNStorage.Survey)"
+            },
+            "typeName": {
+              "id": 1431,
+              "keyType": {
+                "id": 1429,
+                "name": "string",
+                "nodeType": "ElementaryTypeName",
+                "src": "1514:6:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1505:26:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1380_storage_$",
+                "typeString": "mapping(string => struct RNStorage.Survey)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 1430,
+                "name": "Survey",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 1380,
+                "src": "1524:6:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Survey_$1380_storage_ptr",
+                  "typeString": "struct RNStorage.Survey"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1436,
+            "name": "products",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1545:37:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1397_storage_$",
+              "typeString": "mapping(address => struct RNStorage.Product)"
+            },
+            "typeName": {
+              "id": 1435,
+              "keyType": {
+                "id": 1433,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1554:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1545:28:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1397_storage_$",
+                "typeString": "mapping(address => struct RNStorage.Product)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 1434,
+                "name": "Product",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 1397,
+                "src": "1565:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                  "typeString": "struct RNStorage.Product"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1440,
+            "name": "users",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1588:31:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1352_storage_$",
+              "typeString": "mapping(address => struct RNStorage.User)"
+            },
+            "typeName": {
+              "id": 1439,
+              "keyType": {
+                "id": 1437,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1597:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1588:25:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1352_storage_$",
+                "typeString": "mapping(address => struct RNStorage.User)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 1438,
+                "name": "User",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 1352,
+                "src": "1608:4:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                  "typeString": "struct RNStorage.User"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1444,
+            "name": "reviews",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1625:35:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1423_storage_$",
+              "typeString": "mapping(address => struct RNStorage.Review)"
+            },
+            "typeName": {
+              "id": 1443,
+              "keyType": {
+                "id": 1441,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1634:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1625:27:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1423_storage_$",
+                "typeString": "mapping(address => struct RNStorage.Review)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 1442,
+                "name": "Review",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 1423,
+                "src": "1645:6:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Review_$1423_storage_ptr",
+                  "typeString": "struct RNStorage.Review"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1447,
+            "name": "validators",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1666:20:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_address_$dyn_storage",
+              "typeString": "address[]"
+            },
+            "typeName": {
+              "baseType": {
+                "id": 1445,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1666:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "id": 1446,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "1666:9:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                "typeString": "address[]"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 1449,
+        "src": "112:1577:2"
+      }
+    ],
+    "src": "0:1690:2"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/RNStorage.sol",
+    "exportedSymbols": {
+      "RNStorage": [
+        1448
+      ]
+    },
+    "id": 1449,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 1338,
+        "literals": [
+          "solidity",
+          "^",
+          "0.4",
+          ".24"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:2"
+      },
+      {
+        "absolutePath": "zeppelin-solidity/contracts/ownership/Ownable.sol",
+        "file": "zeppelin-solidity/contracts/ownership/Ownable.sol",
+        "id": 1339,
+        "nodeType": "ImportDirective",
+        "scope": 1449,
+        "sourceUnit": 1629,
+        "src": "26:59:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "absolutePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/REWToken.sol",
+        "file": "./REWToken.sol",
+        "id": 1340,
+        "nodeType": "ImportDirective",
+        "scope": 1449,
+        "sourceUnit": 40,
+        "src": "86:24:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 1448,
+        "linearizedBaseContracts": [
+          1448
+        ],
+        "name": "RNStorage",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "RNStorage.SurveyStatus",
+            "id": 1345,
+            "members": [
+              {
+                "id": 1341,
+                "name": "IDLE",
+                "nodeType": "EnumValue",
+                "src": "187:4:2"
+              },
+              {
+                "id": 1342,
+                "name": "FUNDED",
+                "nodeType": "EnumValue",
+                "src": "193:6:2"
+              },
+              {
+                "id": 1343,
+                "name": "IN_PROGRESS",
+                "nodeType": "EnumValue",
+                "src": "201:11:2"
+              },
+              {
+                "id": 1344,
+                "name": "COMPLETED",
+                "nodeType": "EnumValue",
+                "src": "214:9:2"
+              }
+            ],
+            "name": "SurveyStatus",
+            "nodeType": "EnumDefinition",
+            "src": "167:58:2"
+          },
+          {
+            "canonicalName": "RNStorage.ReviewStatus",
+            "id": 1349,
+            "members": [
+              {
+                "id": 1346,
+                "name": "PENDING",
+                "nodeType": "EnumValue",
+                "src": "250:7:2"
+              },
+              {
+                "id": 1347,
+                "name": "APPROVED",
+                "nodeType": "EnumValue",
+                "src": "259:8:2"
+              },
+              {
+                "id": 1348,
+                "name": "REJECTED",
+                "nodeType": "EnumValue",
+                "src": "269:8:2"
+              }
+            ],
+            "name": "ReviewStatus",
+            "nodeType": "EnumDefinition",
+            "src": "230:49:2"
+          },
+          {
+            "canonicalName": "RNStorage.User",
+            "id": 1352,
+            "members": [
+              {
+                "constant": false,
+                "id": 1351,
+                "name": "username",
+                "nodeType": "VariableDeclaration",
+                "scope": 1352,
+                "src": "339:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1350,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "339:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "User",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "317:44:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "RNStorage.Answer",
+            "id": 1355,
+            "members": [
+              {
+                "constant": false,
+                "id": 1354,
+                "name": "answersJsonHash",
+                "nodeType": "VariableDeclaration",
+                "scope": 1355,
+                "src": "391:22:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1353,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "391:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Answer",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "367:53:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "RNStorage.Survey",
+            "id": 1380,
+            "members": [
+              {
+                "constant": false,
+                "id": 1357,
+                "name": "creator",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "450:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1356,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "450:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1359,
+                "name": "publicKey",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "475:16:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1358,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "475:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1361,
+                "name": "title",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "501:12:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1360,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "501:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1363,
+                "name": "surveyJsonHash",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "523:21:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1362,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "523:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1365,
+                "name": "rewardPerSurvey",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "554:20:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1364,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "554:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1367,
+                "name": "funds",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "584:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1366,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "584:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1369,
+                "name": "currentAnswers",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "604:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1368,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "604:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1371,
+                "name": "maxAnswers",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "633:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1370,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "633:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1373,
+                "name": "status",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "658:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_SurveyStatus_$1345",
+                  "typeString": "enum RNStorage.SurveyStatus"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 1372,
+                  "name": "SurveyStatus",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 1345,
+                  "src": "658:12:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_SurveyStatus_$1345",
+                    "typeString": "enum RNStorage.SurveyStatus"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1375,
+                "name": "suspended",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "687:14:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bool",
+                  "typeString": "bool"
+                },
+                "typeName": {
+                  "id": 1374,
+                  "name": "bool",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "687:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bool",
+                    "typeString": "bool"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1379,
+                "name": "answers",
+                "nodeType": "VariableDeclaration",
+                "scope": 1380,
+                "src": "711:35:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1355_storage_$",
+                  "typeString": "mapping(address => struct RNStorage.Answer)"
+                },
+                "typeName": {
+                  "id": 1378,
+                  "keyType": {
+                    "id": 1376,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "720:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "711:27:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1355_storage_$",
+                    "typeString": "mapping(address => struct RNStorage.Answer)"
+                  },
+                  "valueType": {
+                    "contractScope": null,
+                    "id": 1377,
+                    "name": "Answer",
+                    "nodeType": "UserDefinedTypeName",
+                    "referencedDeclaration": 1355,
+                    "src": "731:6:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_struct$_Answer_$1355_storage_ptr",
+                      "typeString": "struct RNStorage.Answer"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Survey",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "426:327:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "RNStorage.Product",
+            "id": 1397,
+            "members": [
+              {
+                "constant": false,
+                "id": 1382,
+                "name": "productAddress",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "784:22:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1381,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "784:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1384,
+                "name": "addedBy",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "816:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 1383,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "816:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1386,
+                "name": "categoryId",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "841:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1385,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "841:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1388,
+                "name": "subcategoryId",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "866:18:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1387,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "866:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1390,
+                "name": "name",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "894:11:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1389,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "894:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1392,
+                "name": "image",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "915:12:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1391,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "915:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1394,
+                "name": "description",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "937:18:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1393,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "937:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1396,
+                "name": "metaJsonHash",
+                "nodeType": "VariableDeclaration",
+                "scope": 1397,
+                "src": "965:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1395,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "965:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Product",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "759:232:2",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "RNStorage.Review",
+            "id": 1423,
+            "members": [
+              {
+                "constant": false,
+                "id": 1399,
+                "name": "author",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1021:11:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                  "typeString": "struct RNStorage.User"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 1398,
+                  "name": "User",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 1352,
+                  "src": "1021:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                    "typeString": "struct RNStorage.User"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1401,
+                "name": "product",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1042:15:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                  "typeString": "struct RNStorage.Product"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 1400,
+                  "name": "Product",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 1397,
+                  "src": "1042:7:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                    "typeString": "struct RNStorage.Product"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1403,
+                "name": "score",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1067:10:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1402,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1067:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1405,
+                "name": "upvotes",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1087:12:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1404,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1087:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1407,
+                "name": "downvotes",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1109:14:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 1406,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1109:4:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1409,
+                "name": "metaJsonHash",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1133:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 1408,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "1133:6:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1411,
+                "name": "status",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1162:19:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_enum$_ReviewStatus_$1349",
+                  "typeString": "enum RNStorage.ReviewStatus"
+                },
+                "typeName": {
+                  "contractScope": null,
+                  "id": 1410,
+                  "name": "ReviewStatus",
+                  "nodeType": "UserDefinedTypeName",
+                  "referencedDeclaration": 1349,
+                  "src": "1162:12:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_enum$_ReviewStatus_$1349",
+                    "typeString": "enum RNStorage.ReviewStatus"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1414,
+                "name": "chosenValidators",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1191:26:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                  "typeString": "address[]"
+                },
+                "typeName": {
+                  "baseType": {
+                    "id": 1412,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1191:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "id": 1413,
+                  "length": null,
+                  "nodeType": "ArrayTypeName",
+                  "src": "1191:9:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                    "typeString": "address[]"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1418,
+                "name": "validationVotes",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1227:40:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_int256_$",
+                  "typeString": "mapping(address => int256)"
+                },
+                "typeName": {
+                  "id": 1417,
+                  "keyType": {
+                    "id": 1415,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1236:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "1227:24:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_int256_$",
+                    "typeString": "mapping(address => int256)"
+                  },
+                  "valueType": {
+                    "id": 1416,
+                    "name": "int",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1247:3:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_int256",
+                      "typeString": "int256"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 1422,
+                "name": "userVotes",
+                "nodeType": "VariableDeclaration",
+                "scope": 1423,
+                "src": "1277:35:2",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
+                  "typeString": "mapping(address => bool)"
+                },
+                "typeName": {
+                  "id": 1421,
+                  "keyType": {
+                    "id": 1419,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1286:7:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "nodeType": "Mapping",
+                  "src": "1277:25:2",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
+                    "typeString": "mapping(address => bool)"
+                  },
+                  "valueType": {
+                    "id": 1420,
+                    "name": "bool",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "1297:4:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_bool",
+                      "typeString": "bool"
+                    }
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "Review",
+            "nodeType": "StructDefinition",
+            "scope": 1448,
+            "src": "997:322:2",
+            "visibility": "public"
+          },
+          {
+            "constant": true,
+            "id": 1426,
+            "name": "NUMBER_OF_VALIDATORS",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1359:38:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_uint256",
+              "typeString": "uint256"
+            },
+            "typeName": {
+              "id": 1424,
+              "name": "uint",
+              "nodeType": "ElementaryTypeName",
+              "src": "1359:4:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_uint256",
+                "typeString": "uint256"
+              }
+            },
+            "value": {
+              "argumentTypes": null,
+              "hexValue": "33",
+              "id": 1425,
+              "isConstant": false,
+              "isLValue": false,
+              "isPure": true,
+              "kind": "number",
+              "lValueRequested": false,
+              "nodeType": "Literal",
+              "src": "1396:1:2",
+              "subdenomination": null,
+              "typeDescriptions": {
+                "typeIdentifier": "t_rational_3_by_1",
+                "typeString": "int_const 3"
+              },
+              "value": "3"
+            },
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1428,
+            "name": "token",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1438:14:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_REWToken_$39",
+              "typeString": "contract REWToken"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 1427,
+              "name": "REWToken",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 39,
+              "src": "1438:8:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_REWToken_$39",
+                "typeString": "contract REWToken"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1432,
+            "name": "surveys",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1505:34:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1380_storage_$",
+              "typeString": "mapping(string => struct RNStorage.Survey)"
+            },
+            "typeName": {
+              "id": 1431,
+              "keyType": {
+                "id": 1429,
+                "name": "string",
+                "nodeType": "ElementaryTypeName",
+                "src": "1514:6:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1505:26:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1380_storage_$",
+                "typeString": "mapping(string => struct RNStorage.Survey)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 1430,
+                "name": "Survey",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 1380,
+                "src": "1524:6:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Survey_$1380_storage_ptr",
+                  "typeString": "struct RNStorage.Survey"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1436,
+            "name": "products",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1545:37:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1397_storage_$",
+              "typeString": "mapping(address => struct RNStorage.Product)"
+            },
+            "typeName": {
+              "id": 1435,
+              "keyType": {
+                "id": 1433,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1554:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1545:28:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1397_storage_$",
+                "typeString": "mapping(address => struct RNStorage.Product)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 1434,
+                "name": "Product",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 1397,
+                "src": "1565:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                  "typeString": "struct RNStorage.Product"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1440,
+            "name": "users",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1588:31:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1352_storage_$",
+              "typeString": "mapping(address => struct RNStorage.User)"
+            },
+            "typeName": {
+              "id": 1439,
+              "keyType": {
+                "id": 1437,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1597:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1588:25:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1352_storage_$",
+                "typeString": "mapping(address => struct RNStorage.User)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 1438,
+                "name": "User",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 1352,
+                "src": "1608:4:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                  "typeString": "struct RNStorage.User"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1444,
+            "name": "reviews",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1625:35:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1423_storage_$",
+              "typeString": "mapping(address => struct RNStorage.Review)"
+            },
+            "typeName": {
+              "id": 1443,
+              "keyType": {
+                "id": 1441,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1634:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "1625:27:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1423_storage_$",
+                "typeString": "mapping(address => struct RNStorage.Review)"
+              },
+              "valueType": {
+                "contractScope": null,
+                "id": 1442,
+                "name": "Review",
+                "nodeType": "UserDefinedTypeName",
+                "referencedDeclaration": 1423,
+                "src": "1645:6:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Review_$1423_storage_ptr",
+                  "typeString": "struct RNStorage.Review"
+                }
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          },
+          {
+            "constant": false,
+            "id": 1447,
+            "name": "validators",
+            "nodeType": "VariableDeclaration",
+            "scope": 1448,
+            "src": "1666:20:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_array$_t_address_$dyn_storage",
+              "typeString": "address[]"
+            },
+            "typeName": {
+              "baseType": {
+                "id": 1445,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "1666:7:2",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "id": 1446,
+              "length": null,
+              "nodeType": "ArrayTypeName",
+              "src": "1666:9:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
+                "typeString": "address[]"
+              }
+            },
+            "value": null,
+            "visibility": "internal"
+          }
+        ],
+        "scope": 1449,
+        "src": "112:1577:2"
+      }
+    ],
+    "src": "0:1690:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "2.0.1",
+  "updatedAt": "2018-09-05T20:31:05.171Z"
+}
