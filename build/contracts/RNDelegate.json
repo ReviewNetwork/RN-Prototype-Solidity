@@ -36041,20 +36041,7 @@
     "name": "solc",
     "version": "0.4.24+commit.e67f0147.Emscripten.clang"
   },
-<<<<<<< HEAD:build/contracts/ReviewNetwork.json
-  "networks": {
-    "4": {
-      "events": {},
-      "links": {},
-      "address": "0x115d94e97eb91d1fda6734ea1a8ff2cba558d102",
-      "transactionHash": "0xcb8b49bce4a96e77661c252a989509f2ac8596d496819102e296afe90d9972cd"
-    }
-  },
-  "schemaVersion": "2.0.1",
-  "updatedAt": "2018-09-01T21:06:31.946Z"
-=======
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-09-06T21:36:43.762Z"
->>>>>>> 3afac8c1a3b3e2c1221643b566cc5b969baba870:build/contracts/RNDelegate.json
+  "updatedAt": "2018-09-06T21:41:38.215Z"
 }
