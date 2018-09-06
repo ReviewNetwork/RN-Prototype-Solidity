@@ -3,22 +3,22 @@
   "abi": [],
   "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3006080604052600080fd00a165627a7a723058205f975bb22053d650792404ed811f8c352883cf923b80e96cc44af589297707ce0029",
   "deployedBytecode": "0x6080604052600080fd00a165627a7a723058205f975bb22053d650792404ed811f8c352883cf923b80e96cc44af589297707ce0029",
-  "sourceMap": "112:1577:2:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;112:1577:2;;;;;;;",
-  "deployedSourceMap": "112:1577:2:-;;;;;",
+  "sourceMap": "112:1577:4:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;112:1577:4;;;;;;;",
+  "deployedSourceMap": "112:1577:4:-;;;;;",
   "source": "pragma solidity ^0.4.24;\n\nimport \"zeppelin-solidity/contracts/ownership/Ownable.sol\";\nimport \"./REWToken.sol\";\n\ncontract RNStorage {\n    /**\n     * Enums\n     */\n\n    enum SurveyStatus { IDLE, FUNDED, IN_PROGRESS, COMPLETED }\n    enum ReviewStatus { PENDING, APPROVED, REJECTED }\n\n    /**\n     * Structs\n     */\n\n    struct User {\n        string username;\n    }\n\n    struct Answer {\n        string answersJsonHash;\n    }\n\n    struct Survey {\n        address creator;\n        string publicKey;\n        string title;\n        string surveyJsonHash;\n        uint rewardPerSurvey;\n        uint funds;\n        uint currentAnswers;\n        uint maxAnswers;\n        SurveyStatus status;\n        bool suspended;\n        mapping (address => Answer) answers;\n    }\n\n    struct Product {\n        address productAddress;\n        address addedBy;\n        uint categoryId;\n        uint subcategoryId;\n        string name;\n        string image;\n        string description;\n        string metaJsonHash;\n    }\n\n    struct Review {\n        User author;\n        Product product;\n        uint score;\n        uint upvotes;\n        uint downvotes;\n        string metaJsonHash;\n        ReviewStatus status;\n        address[] chosenValidators;\n        mapping (address => int) validationVotes;\n        mapping (address => bool) userVotes;\n    }\n\n    /**\n     * Constants\n     */\n\n    uint constant NUMBER_OF_VALIDATORS = 3;\n\n    /**\n     * Variables\n     */\n\n    REWToken token;\n\n    /* key: string - Survey JSON IPFS hash */\n    mapping (string => Survey) surveys;\n    mapping (address => Product) products;\n    mapping (address => User) users;\n    mapping (address => Review) reviews;\n    address[] validators;\n}\n",
   "sourcePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/RNStorage.sol",
   "ast": {
     "absolutePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/RNStorage.sol",
     "exportedSymbols": {
       "RNStorage": [
-        1448
+        1587
       ]
     },
-    "id": 1449,
+    "id": 1588,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1338,
+        "id": 1477,
         "literals": [
           "solidity",
           "^",
@@ -26,27 +26,27 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:2"
+        "src": "0:24:4"
       },
       {
         "absolutePath": "zeppelin-solidity/contracts/ownership/Ownable.sol",
         "file": "zeppelin-solidity/contracts/ownership/Ownable.sol",
-        "id": 1339,
+        "id": 1478,
         "nodeType": "ImportDirective",
-        "scope": 1449,
-        "sourceUnit": 1629,
-        "src": "26:59:2",
+        "scope": 1588,
+        "sourceUnit": 1789,
+        "src": "26:59:4",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/REWToken.sol",
         "file": "./REWToken.sol",
-        "id": 1340,
+        "id": 1479,
         "nodeType": "ImportDirective",
-        "scope": 1449,
-        "sourceUnit": 40,
-        "src": "86:24:2",
+        "scope": 1588,
+        "sourceUnit": 97,
+        "src": "86:24:4",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -56,84 +56,84 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 1448,
+        "id": 1587,
         "linearizedBaseContracts": [
-          1448
+          1587
         ],
         "name": "RNStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "RNStorage.SurveyStatus",
-            "id": 1345,
+            "id": 1484,
             "members": [
               {
-                "id": 1341,
+                "id": 1480,
                 "name": "IDLE",
                 "nodeType": "EnumValue",
-                "src": "187:4:2"
+                "src": "187:4:4"
               },
               {
-                "id": 1342,
+                "id": 1481,
                 "name": "FUNDED",
                 "nodeType": "EnumValue",
-                "src": "193:6:2"
+                "src": "193:6:4"
               },
               {
-                "id": 1343,
+                "id": 1482,
                 "name": "IN_PROGRESS",
                 "nodeType": "EnumValue",
-                "src": "201:11:2"
+                "src": "201:11:4"
               },
               {
-                "id": 1344,
+                "id": 1483,
                 "name": "COMPLETED",
                 "nodeType": "EnumValue",
-                "src": "214:9:2"
+                "src": "214:9:4"
               }
             ],
             "name": "SurveyStatus",
             "nodeType": "EnumDefinition",
-            "src": "167:58:2"
+            "src": "167:58:4"
           },
           {
             "canonicalName": "RNStorage.ReviewStatus",
-            "id": 1349,
+            "id": 1488,
             "members": [
               {
-                "id": 1346,
+                "id": 1485,
                 "name": "PENDING",
                 "nodeType": "EnumValue",
-                "src": "250:7:2"
+                "src": "250:7:4"
               },
               {
-                "id": 1347,
+                "id": 1486,
                 "name": "APPROVED",
                 "nodeType": "EnumValue",
-                "src": "259:8:2"
+                "src": "259:8:4"
               },
               {
-                "id": 1348,
+                "id": 1487,
                 "name": "REJECTED",
                 "nodeType": "EnumValue",
-                "src": "269:8:2"
+                "src": "269:8:4"
               }
             ],
             "name": "ReviewStatus",
             "nodeType": "EnumDefinition",
-            "src": "230:49:2"
+            "src": "230:49:4"
           },
           {
             "canonicalName": "RNStorage.User",
-            "id": 1352,
+            "id": 1491,
             "members": [
               {
                 "constant": false,
-                "id": 1351,
+                "id": 1490,
                 "name": "username",
                 "nodeType": "VariableDeclaration",
-                "scope": 1352,
-                "src": "339:15:2",
+                "scope": 1491,
+                "src": "339:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -141,10 +141,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1350,
+                  "id": 1489,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "339:6:2",
+                  "src": "339:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -156,21 +156,21 @@
             ],
             "name": "User",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "317:44:2",
+            "scope": 1587,
+            "src": "317:44:4",
             "visibility": "public"
           },
           {
             "canonicalName": "RNStorage.Answer",
-            "id": 1355,
+            "id": 1494,
             "members": [
               {
                 "constant": false,
-                "id": 1354,
+                "id": 1493,
                 "name": "answersJsonHash",
                 "nodeType": "VariableDeclaration",
-                "scope": 1355,
-                "src": "391:22:2",
+                "scope": 1494,
+                "src": "391:22:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -178,10 +178,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1353,
+                  "id": 1492,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "391:6:2",
+                  "src": "391:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -193,21 +193,21 @@
             ],
             "name": "Answer",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "367:53:2",
+            "scope": 1587,
+            "src": "367:53:4",
             "visibility": "public"
           },
           {
             "canonicalName": "RNStorage.Survey",
-            "id": 1380,
+            "id": 1519,
             "members": [
               {
                 "constant": false,
-                "id": 1357,
+                "id": 1496,
                 "name": "creator",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "450:15:2",
+                "scope": 1519,
+                "src": "450:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -215,10 +215,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1356,
+                  "id": 1495,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "450:7:2",
+                  "src": "450:7:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
@@ -229,11 +229,11 @@
               },
               {
                 "constant": false,
-                "id": 1359,
+                "id": 1498,
                 "name": "publicKey",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "475:16:2",
+                "scope": 1519,
+                "src": "475:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -241,10 +241,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1358,
+                  "id": 1497,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "475:6:2",
+                  "src": "475:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -255,11 +255,11 @@
               },
               {
                 "constant": false,
-                "id": 1361,
+                "id": 1500,
                 "name": "title",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "501:12:2",
+                "scope": 1519,
+                "src": "501:12:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -267,10 +267,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1360,
+                  "id": 1499,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "501:6:2",
+                  "src": "501:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -281,11 +281,11 @@
               },
               {
                 "constant": false,
-                "id": 1363,
+                "id": 1502,
                 "name": "surveyJsonHash",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "523:21:2",
+                "scope": 1519,
+                "src": "523:21:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -293,10 +293,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1362,
+                  "id": 1501,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "523:6:2",
+                  "src": "523:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -307,11 +307,11 @@
               },
               {
                 "constant": false,
-                "id": 1365,
+                "id": 1504,
                 "name": "rewardPerSurvey",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "554:20:2",
+                "scope": 1519,
+                "src": "554:20:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -319,10 +319,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1364,
+                  "id": 1503,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "554:4:2",
+                  "src": "554:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -333,11 +333,11 @@
               },
               {
                 "constant": false,
-                "id": 1367,
+                "id": 1506,
                 "name": "funds",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "584:10:2",
+                "scope": 1519,
+                "src": "584:10:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -345,10 +345,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1366,
+                  "id": 1505,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "584:4:2",
+                  "src": "584:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -359,11 +359,11 @@
               },
               {
                 "constant": false,
-                "id": 1369,
+                "id": 1508,
                 "name": "currentAnswers",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "604:19:2",
+                "scope": 1519,
+                "src": "604:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -371,10 +371,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1368,
+                  "id": 1507,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "604:4:2",
+                  "src": "604:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -385,11 +385,11 @@
               },
               {
                 "constant": false,
-                "id": 1371,
+                "id": 1510,
                 "name": "maxAnswers",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "633:15:2",
+                "scope": 1519,
+                "src": "633:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -397,10 +397,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1370,
+                  "id": 1509,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "633:4:2",
+                  "src": "633:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -411,26 +411,26 @@
               },
               {
                 "constant": false,
-                "id": 1373,
+                "id": 1512,
                 "name": "status",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "658:19:2",
+                "scope": 1519,
+                "src": "658:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_SurveyStatus_$1345",
+                  "typeIdentifier": "t_enum$_SurveyStatus_$1484",
                   "typeString": "enum RNStorage.SurveyStatus"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 1372,
+                  "id": 1511,
                   "name": "SurveyStatus",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 1345,
-                  "src": "658:12:2",
+                  "referencedDeclaration": 1484,
+                  "src": "658:12:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_SurveyStatus_$1345",
+                    "typeIdentifier": "t_enum$_SurveyStatus_$1484",
                     "typeString": "enum RNStorage.SurveyStatus"
                   }
                 },
@@ -439,11 +439,11 @@
               },
               {
                 "constant": false,
-                "id": 1375,
+                "id": 1514,
                 "name": "suspended",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "687:14:2",
+                "scope": 1519,
+                "src": "687:14:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -451,10 +451,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 1374,
+                  "id": 1513,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "687:4:2",
+                  "src": "687:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -465,44 +465,44 @@
               },
               {
                 "constant": false,
-                "id": 1379,
+                "id": 1518,
                 "name": "answers",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "711:35:2",
+                "scope": 1519,
+                "src": "711:35:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1355_storage_$",
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1494_storage_$",
                   "typeString": "mapping(address => struct RNStorage.Answer)"
                 },
                 "typeName": {
-                  "id": 1378,
+                  "id": 1517,
                   "keyType": {
-                    "id": 1376,
+                    "id": 1515,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "720:7:2",
+                    "src": "720:7:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
                   "nodeType": "Mapping",
-                  "src": "711:27:2",
+                  "src": "711:27:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1355_storage_$",
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1494_storage_$",
                     "typeString": "mapping(address => struct RNStorage.Answer)"
                   },
                   "valueType": {
                     "contractScope": null,
-                    "id": 1377,
+                    "id": 1516,
                     "name": "Answer",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 1355,
-                    "src": "731:6:2",
+                    "referencedDeclaration": 1494,
+                    "src": "731:6:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Answer_$1355_storage_ptr",
+                      "typeIdentifier": "t_struct$_Answer_$1494_storage_ptr",
                       "typeString": "struct RNStorage.Answer"
                     }
                   }
@@ -513,21 +513,21 @@
             ],
             "name": "Survey",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "426:327:2",
+            "scope": 1587,
+            "src": "426:327:4",
             "visibility": "public"
           },
           {
             "canonicalName": "RNStorage.Product",
-            "id": 1397,
+            "id": 1536,
             "members": [
               {
                 "constant": false,
-                "id": 1382,
+                "id": 1521,
                 "name": "productAddress",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "784:22:2",
+                "scope": 1536,
+                "src": "784:22:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -535,10 +535,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1381,
+                  "id": 1520,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "784:7:2",
+                  "src": "784:7:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
@@ -549,11 +549,11 @@
               },
               {
                 "constant": false,
-                "id": 1384,
+                "id": 1523,
                 "name": "addedBy",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "816:15:2",
+                "scope": 1536,
+                "src": "816:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -561,10 +561,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1383,
+                  "id": 1522,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "816:7:2",
+                  "src": "816:7:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
@@ -575,11 +575,11 @@
               },
               {
                 "constant": false,
-                "id": 1386,
+                "id": 1525,
                 "name": "categoryId",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "841:15:2",
+                "scope": 1536,
+                "src": "841:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -587,10 +587,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1385,
+                  "id": 1524,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "841:4:2",
+                  "src": "841:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -601,11 +601,11 @@
               },
               {
                 "constant": false,
-                "id": 1388,
+                "id": 1527,
                 "name": "subcategoryId",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "866:18:2",
+                "scope": 1536,
+                "src": "866:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -613,10 +613,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1387,
+                  "id": 1526,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "866:4:2",
+                  "src": "866:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -627,11 +627,11 @@
               },
               {
                 "constant": false,
-                "id": 1390,
+                "id": 1529,
                 "name": "name",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "894:11:2",
+                "scope": 1536,
+                "src": "894:11:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -639,10 +639,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1389,
+                  "id": 1528,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "894:6:2",
+                  "src": "894:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -653,11 +653,11 @@
               },
               {
                 "constant": false,
-                "id": 1392,
+                "id": 1531,
                 "name": "image",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "915:12:2",
+                "scope": 1536,
+                "src": "915:12:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -665,10 +665,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1391,
+                  "id": 1530,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "915:6:2",
+                  "src": "915:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -679,11 +679,11 @@
               },
               {
                 "constant": false,
-                "id": 1394,
+                "id": 1533,
                 "name": "description",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "937:18:2",
+                "scope": 1536,
+                "src": "937:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -691,10 +691,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1393,
+                  "id": 1532,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "937:6:2",
+                  "src": "937:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -705,11 +705,11 @@
               },
               {
                 "constant": false,
-                "id": 1396,
+                "id": 1535,
                 "name": "metaJsonHash",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "965:19:2",
+                "scope": 1536,
+                "src": "965:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -717,10 +717,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1395,
+                  "id": 1534,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "965:6:2",
+                  "src": "965:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -732,36 +732,36 @@
             ],
             "name": "Product",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "759:232:2",
+            "scope": 1587,
+            "src": "759:232:4",
             "visibility": "public"
           },
           {
             "canonicalName": "RNStorage.Review",
-            "id": 1423,
+            "id": 1562,
             "members": [
               {
                 "constant": false,
-                "id": 1399,
+                "id": 1538,
                 "name": "author",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1021:11:2",
+                "scope": 1562,
+                "src": "1021:11:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                  "typeIdentifier": "t_struct$_User_$1491_storage_ptr",
                   "typeString": "struct RNStorage.User"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 1398,
+                  "id": 1537,
                   "name": "User",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 1352,
-                  "src": "1021:4:2",
+                  "referencedDeclaration": 1491,
+                  "src": "1021:4:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                    "typeIdentifier": "t_struct$_User_$1491_storage_ptr",
                     "typeString": "struct RNStorage.User"
                   }
                 },
@@ -770,26 +770,26 @@
               },
               {
                 "constant": false,
-                "id": 1401,
+                "id": 1540,
                 "name": "product",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1042:15:2",
+                "scope": 1562,
+                "src": "1042:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                  "typeIdentifier": "t_struct$_Product_$1536_storage_ptr",
                   "typeString": "struct RNStorage.Product"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 1400,
+                  "id": 1539,
                   "name": "Product",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 1397,
-                  "src": "1042:7:2",
+                  "referencedDeclaration": 1536,
+                  "src": "1042:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                    "typeIdentifier": "t_struct$_Product_$1536_storage_ptr",
                     "typeString": "struct RNStorage.Product"
                   }
                 },
@@ -798,11 +798,11 @@
               },
               {
                 "constant": false,
-                "id": 1403,
+                "id": 1542,
                 "name": "score",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1067:10:2",
+                "scope": 1562,
+                "src": "1067:10:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -810,10 +810,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1402,
+                  "id": 1541,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1067:4:2",
+                  "src": "1067:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -824,11 +824,11 @@
               },
               {
                 "constant": false,
-                "id": 1405,
+                "id": 1544,
                 "name": "upvotes",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1087:12:2",
+                "scope": 1562,
+                "src": "1087:12:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -836,10 +836,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1404,
+                  "id": 1543,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1087:4:2",
+                  "src": "1087:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -850,11 +850,11 @@
               },
               {
                 "constant": false,
-                "id": 1407,
+                "id": 1546,
                 "name": "downvotes",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1109:14:2",
+                "scope": 1562,
+                "src": "1109:14:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -862,10 +862,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1406,
+                  "id": 1545,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1109:4:2",
+                  "src": "1109:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -876,11 +876,11 @@
               },
               {
                 "constant": false,
-                "id": 1409,
+                "id": 1548,
                 "name": "metaJsonHash",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1133:19:2",
+                "scope": 1562,
+                "src": "1133:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -888,10 +888,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1408,
+                  "id": 1547,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1133:6:2",
+                  "src": "1133:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -902,26 +902,26 @@
               },
               {
                 "constant": false,
-                "id": 1411,
+                "id": 1550,
                 "name": "status",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1162:19:2",
+                "scope": 1562,
+                "src": "1162:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_ReviewStatus_$1349",
+                  "typeIdentifier": "t_enum$_ReviewStatus_$1488",
                   "typeString": "enum RNStorage.ReviewStatus"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 1410,
+                  "id": 1549,
                   "name": "ReviewStatus",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 1349,
-                  "src": "1162:12:2",
+                  "referencedDeclaration": 1488,
+                  "src": "1162:12:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_ReviewStatus_$1349",
+                    "typeIdentifier": "t_enum$_ReviewStatus_$1488",
                     "typeString": "enum RNStorage.ReviewStatus"
                   }
                 },
@@ -930,11 +930,11 @@
               },
               {
                 "constant": false,
-                "id": 1414,
+                "id": 1553,
                 "name": "chosenValidators",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1191:26:2",
+                "scope": 1562,
+                "src": "1191:26:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -943,19 +943,19 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 1412,
+                    "id": 1551,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1191:7:2",
+                    "src": "1191:7:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "id": 1413,
+                  "id": 1552,
                   "length": null,
                   "nodeType": "ArrayTypeName",
-                  "src": "1191:9:2",
+                  "src": "1191:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
                     "typeString": "address[]"
@@ -966,11 +966,11 @@
               },
               {
                 "constant": false,
-                "id": 1418,
+                "id": 1557,
                 "name": "validationVotes",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1227:40:2",
+                "scope": 1562,
+                "src": "1227:40:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -978,28 +978,28 @@
                   "typeString": "mapping(address => int256)"
                 },
                 "typeName": {
-                  "id": 1417,
+                  "id": 1556,
                   "keyType": {
-                    "id": 1415,
+                    "id": 1554,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1236:7:2",
+                    "src": "1236:7:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
                   "nodeType": "Mapping",
-                  "src": "1227:24:2",
+                  "src": "1227:24:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_mapping$_t_address_$_t_int256_$",
                     "typeString": "mapping(address => int256)"
                   },
                   "valueType": {
-                    "id": 1416,
+                    "id": 1555,
                     "name": "int",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1247:3:2",
+                    "src": "1247:3:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_int256",
                       "typeString": "int256"
@@ -1011,11 +1011,11 @@
               },
               {
                 "constant": false,
-                "id": 1422,
+                "id": 1561,
                 "name": "userVotes",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1277:35:2",
+                "scope": 1562,
+                "src": "1277:35:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1023,28 +1023,28 @@
                   "typeString": "mapping(address => bool)"
                 },
                 "typeName": {
-                  "id": 1421,
+                  "id": 1560,
                   "keyType": {
-                    "id": 1419,
+                    "id": 1558,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1286:7:2",
+                    "src": "1286:7:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
                   "nodeType": "Mapping",
-                  "src": "1277:25:2",
+                  "src": "1277:25:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                     "typeString": "mapping(address => bool)"
                   },
                   "valueType": {
-                    "id": 1420,
+                    "id": 1559,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1297:4:2",
+                    "src": "1297:4:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1057,17 +1057,17 @@
             ],
             "name": "Review",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "997:322:2",
+            "scope": 1587,
+            "src": "997:322:4",
             "visibility": "public"
           },
           {
             "constant": true,
-            "id": 1426,
+            "id": 1565,
             "name": "NUMBER_OF_VALIDATORS",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1359:38:2",
+            "scope": 1587,
+            "src": "1359:38:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1075,10 +1075,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 1424,
+              "id": 1563,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "1359:4:2",
+              "src": "1359:4:4",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -1087,14 +1087,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "33",
-              "id": 1425,
+              "id": 1564,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1396:1:2",
+              "src": "1396:1:4",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3_by_1",
@@ -1106,26 +1106,26 @@
           },
           {
             "constant": false,
-            "id": 1428,
+            "id": 1567,
             "name": "token",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1438:14:2",
+            "scope": 1587,
+            "src": "1438:14:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_REWToken_$39",
+              "typeIdentifier": "t_contract$_REWToken_$96",
               "typeString": "contract REWToken"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1427,
+              "id": 1566,
               "name": "REWToken",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 39,
-              "src": "1438:8:2",
+              "referencedDeclaration": 96,
+              "src": "1438:8:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_REWToken_$39",
+                "typeIdentifier": "t_contract$_REWToken_$96",
                 "typeString": "contract REWToken"
               }
             },
@@ -1134,44 +1134,44 @@
           },
           {
             "constant": false,
-            "id": 1432,
+            "id": 1571,
             "name": "surveys",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1505:34:2",
+            "scope": 1587,
+            "src": "1505:34:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1380_storage_$",
+              "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1519_storage_$",
               "typeString": "mapping(string => struct RNStorage.Survey)"
             },
             "typeName": {
-              "id": 1431,
+              "id": 1570,
               "keyType": {
-                "id": 1429,
+                "id": 1568,
                 "name": "string",
                 "nodeType": "ElementaryTypeName",
-                "src": "1514:6:2",
+                "src": "1514:6:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_string_storage_ptr",
                   "typeString": "string"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1505:26:2",
+              "src": "1505:26:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1380_storage_$",
+                "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1519_storage_$",
                 "typeString": "mapping(string => struct RNStorage.Survey)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 1430,
+                "id": 1569,
                 "name": "Survey",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1380,
-                "src": "1524:6:2",
+                "referencedDeclaration": 1519,
+                "src": "1524:6:4",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Survey_$1380_storage_ptr",
+                  "typeIdentifier": "t_struct$_Survey_$1519_storage_ptr",
                   "typeString": "struct RNStorage.Survey"
                 }
               }
@@ -1181,44 +1181,44 @@
           },
           {
             "constant": false,
-            "id": 1436,
+            "id": 1575,
             "name": "products",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1545:37:2",
+            "scope": 1587,
+            "src": "1545:37:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1397_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1536_storage_$",
               "typeString": "mapping(address => struct RNStorage.Product)"
             },
             "typeName": {
-              "id": 1435,
+              "id": 1574,
               "keyType": {
-                "id": 1433,
+                "id": 1572,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1554:7:2",
+                "src": "1554:7:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1545:28:2",
+              "src": "1545:28:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1397_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1536_storage_$",
                 "typeString": "mapping(address => struct RNStorage.Product)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 1434,
+                "id": 1573,
                 "name": "Product",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1397,
-                "src": "1565:7:2",
+                "referencedDeclaration": 1536,
+                "src": "1565:7:4",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                  "typeIdentifier": "t_struct$_Product_$1536_storage_ptr",
                   "typeString": "struct RNStorage.Product"
                 }
               }
@@ -1228,44 +1228,44 @@
           },
           {
             "constant": false,
-            "id": 1440,
+            "id": 1579,
             "name": "users",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1588:31:2",
+            "scope": 1587,
+            "src": "1588:31:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1352_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1491_storage_$",
               "typeString": "mapping(address => struct RNStorage.User)"
             },
             "typeName": {
-              "id": 1439,
+              "id": 1578,
               "keyType": {
-                "id": 1437,
+                "id": 1576,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1597:7:2",
+                "src": "1597:7:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1588:25:2",
+              "src": "1588:25:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1352_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1491_storage_$",
                 "typeString": "mapping(address => struct RNStorage.User)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 1438,
+                "id": 1577,
                 "name": "User",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1352,
-                "src": "1608:4:2",
+                "referencedDeclaration": 1491,
+                "src": "1608:4:4",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                  "typeIdentifier": "t_struct$_User_$1491_storage_ptr",
                   "typeString": "struct RNStorage.User"
                 }
               }
@@ -1275,44 +1275,44 @@
           },
           {
             "constant": false,
-            "id": 1444,
+            "id": 1583,
             "name": "reviews",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1625:35:2",
+            "scope": 1587,
+            "src": "1625:35:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1423_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1562_storage_$",
               "typeString": "mapping(address => struct RNStorage.Review)"
             },
             "typeName": {
-              "id": 1443,
+              "id": 1582,
               "keyType": {
-                "id": 1441,
+                "id": 1580,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1634:7:2",
+                "src": "1634:7:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1625:27:2",
+              "src": "1625:27:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1423_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1562_storage_$",
                 "typeString": "mapping(address => struct RNStorage.Review)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 1442,
+                "id": 1581,
                 "name": "Review",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1423,
-                "src": "1645:6:2",
+                "referencedDeclaration": 1562,
+                "src": "1645:6:4",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Review_$1423_storage_ptr",
+                  "typeIdentifier": "t_struct$_Review_$1562_storage_ptr",
                   "typeString": "struct RNStorage.Review"
                 }
               }
@@ -1322,11 +1322,11 @@
           },
           {
             "constant": false,
-            "id": 1447,
+            "id": 1586,
             "name": "validators",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1666:20:2",
+            "scope": 1587,
+            "src": "1666:20:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -1335,19 +1335,19 @@
             },
             "typeName": {
               "baseType": {
-                "id": 1445,
+                "id": 1584,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1666:7:2",
+                "src": "1666:7:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
-              "id": 1446,
+              "id": 1585,
               "length": null,
               "nodeType": "ArrayTypeName",
-              "src": "1666:9:2",
+              "src": "1666:9:4",
               "typeDescriptions": {
                 "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
                 "typeString": "address[]"
@@ -1357,24 +1357,24 @@
             "visibility": "internal"
           }
         ],
-        "scope": 1449,
-        "src": "112:1577:2"
+        "scope": 1588,
+        "src": "112:1577:4"
       }
     ],
-    "src": "0:1690:2"
+    "src": "0:1690:4"
   },
   "legacyAST": {
     "absolutePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/RNStorage.sol",
     "exportedSymbols": {
       "RNStorage": [
-        1448
+        1587
       ]
     },
-    "id": 1449,
+    "id": 1588,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 1338,
+        "id": 1477,
         "literals": [
           "solidity",
           "^",
@@ -1382,27 +1382,27 @@
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:2"
+        "src": "0:24:4"
       },
       {
         "absolutePath": "zeppelin-solidity/contracts/ownership/Ownable.sol",
         "file": "zeppelin-solidity/contracts/ownership/Ownable.sol",
-        "id": 1339,
+        "id": 1478,
         "nodeType": "ImportDirective",
-        "scope": 1449,
-        "sourceUnit": 1629,
-        "src": "26:59:2",
+        "scope": 1588,
+        "sourceUnit": 1789,
+        "src": "26:59:4",
         "symbolAliases": [],
         "unitAlias": ""
       },
       {
         "absolutePath": "/Users/petars/projects/review-network/rn-prototype-solidity/contracts/REWToken.sol",
         "file": "./REWToken.sol",
-        "id": 1340,
+        "id": 1479,
         "nodeType": "ImportDirective",
-        "scope": 1449,
-        "sourceUnit": 40,
-        "src": "86:24:2",
+        "scope": 1588,
+        "sourceUnit": 97,
+        "src": "86:24:4",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -1412,84 +1412,84 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 1448,
+        "id": 1587,
         "linearizedBaseContracts": [
-          1448
+          1587
         ],
         "name": "RNStorage",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "canonicalName": "RNStorage.SurveyStatus",
-            "id": 1345,
+            "id": 1484,
             "members": [
               {
-                "id": 1341,
+                "id": 1480,
                 "name": "IDLE",
                 "nodeType": "EnumValue",
-                "src": "187:4:2"
+                "src": "187:4:4"
               },
               {
-                "id": 1342,
+                "id": 1481,
                 "name": "FUNDED",
                 "nodeType": "EnumValue",
-                "src": "193:6:2"
+                "src": "193:6:4"
               },
               {
-                "id": 1343,
+                "id": 1482,
                 "name": "IN_PROGRESS",
                 "nodeType": "EnumValue",
-                "src": "201:11:2"
+                "src": "201:11:4"
               },
               {
-                "id": 1344,
+                "id": 1483,
                 "name": "COMPLETED",
                 "nodeType": "EnumValue",
-                "src": "214:9:2"
+                "src": "214:9:4"
               }
             ],
             "name": "SurveyStatus",
             "nodeType": "EnumDefinition",
-            "src": "167:58:2"
+            "src": "167:58:4"
           },
           {
             "canonicalName": "RNStorage.ReviewStatus",
-            "id": 1349,
+            "id": 1488,
             "members": [
               {
-                "id": 1346,
+                "id": 1485,
                 "name": "PENDING",
                 "nodeType": "EnumValue",
-                "src": "250:7:2"
+                "src": "250:7:4"
               },
               {
-                "id": 1347,
+                "id": 1486,
                 "name": "APPROVED",
                 "nodeType": "EnumValue",
-                "src": "259:8:2"
+                "src": "259:8:4"
               },
               {
-                "id": 1348,
+                "id": 1487,
                 "name": "REJECTED",
                 "nodeType": "EnumValue",
-                "src": "269:8:2"
+                "src": "269:8:4"
               }
             ],
             "name": "ReviewStatus",
             "nodeType": "EnumDefinition",
-            "src": "230:49:2"
+            "src": "230:49:4"
           },
           {
             "canonicalName": "RNStorage.User",
-            "id": 1352,
+            "id": 1491,
             "members": [
               {
                 "constant": false,
-                "id": 1351,
+                "id": 1490,
                 "name": "username",
                 "nodeType": "VariableDeclaration",
-                "scope": 1352,
-                "src": "339:15:2",
+                "scope": 1491,
+                "src": "339:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1497,10 +1497,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1350,
+                  "id": 1489,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "339:6:2",
+                  "src": "339:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1512,21 +1512,21 @@
             ],
             "name": "User",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "317:44:2",
+            "scope": 1587,
+            "src": "317:44:4",
             "visibility": "public"
           },
           {
             "canonicalName": "RNStorage.Answer",
-            "id": 1355,
+            "id": 1494,
             "members": [
               {
                 "constant": false,
-                "id": 1354,
+                "id": 1493,
                 "name": "answersJsonHash",
                 "nodeType": "VariableDeclaration",
-                "scope": 1355,
-                "src": "391:22:2",
+                "scope": 1494,
+                "src": "391:22:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1534,10 +1534,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1353,
+                  "id": 1492,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "391:6:2",
+                  "src": "391:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1549,21 +1549,21 @@
             ],
             "name": "Answer",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "367:53:2",
+            "scope": 1587,
+            "src": "367:53:4",
             "visibility": "public"
           },
           {
             "canonicalName": "RNStorage.Survey",
-            "id": 1380,
+            "id": 1519,
             "members": [
               {
                 "constant": false,
-                "id": 1357,
+                "id": 1496,
                 "name": "creator",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "450:15:2",
+                "scope": 1519,
+                "src": "450:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1571,10 +1571,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1356,
+                  "id": 1495,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "450:7:2",
+                  "src": "450:7:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
@@ -1585,11 +1585,11 @@
               },
               {
                 "constant": false,
-                "id": 1359,
+                "id": 1498,
                 "name": "publicKey",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "475:16:2",
+                "scope": 1519,
+                "src": "475:16:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1597,10 +1597,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1358,
+                  "id": 1497,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "475:6:2",
+                  "src": "475:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1611,11 +1611,11 @@
               },
               {
                 "constant": false,
-                "id": 1361,
+                "id": 1500,
                 "name": "title",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "501:12:2",
+                "scope": 1519,
+                "src": "501:12:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1623,10 +1623,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1360,
+                  "id": 1499,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "501:6:2",
+                  "src": "501:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1637,11 +1637,11 @@
               },
               {
                 "constant": false,
-                "id": 1363,
+                "id": 1502,
                 "name": "surveyJsonHash",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "523:21:2",
+                "scope": 1519,
+                "src": "523:21:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1649,10 +1649,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1362,
+                  "id": 1501,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "523:6:2",
+                  "src": "523:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -1663,11 +1663,11 @@
               },
               {
                 "constant": false,
-                "id": 1365,
+                "id": 1504,
                 "name": "rewardPerSurvey",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "554:20:2",
+                "scope": 1519,
+                "src": "554:20:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1675,10 +1675,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1364,
+                  "id": 1503,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "554:4:2",
+                  "src": "554:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1689,11 +1689,11 @@
               },
               {
                 "constant": false,
-                "id": 1367,
+                "id": 1506,
                 "name": "funds",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "584:10:2",
+                "scope": 1519,
+                "src": "584:10:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1701,10 +1701,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1366,
+                  "id": 1505,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "584:4:2",
+                  "src": "584:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1715,11 +1715,11 @@
               },
               {
                 "constant": false,
-                "id": 1369,
+                "id": 1508,
                 "name": "currentAnswers",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "604:19:2",
+                "scope": 1519,
+                "src": "604:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1727,10 +1727,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1368,
+                  "id": 1507,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "604:4:2",
+                  "src": "604:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1741,11 +1741,11 @@
               },
               {
                 "constant": false,
-                "id": 1371,
+                "id": 1510,
                 "name": "maxAnswers",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "633:15:2",
+                "scope": 1519,
+                "src": "633:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1753,10 +1753,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1370,
+                  "id": 1509,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "633:4:2",
+                  "src": "633:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1767,26 +1767,26 @@
               },
               {
                 "constant": false,
-                "id": 1373,
+                "id": 1512,
                 "name": "status",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "658:19:2",
+                "scope": 1519,
+                "src": "658:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_SurveyStatus_$1345",
+                  "typeIdentifier": "t_enum$_SurveyStatus_$1484",
                   "typeString": "enum RNStorage.SurveyStatus"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 1372,
+                  "id": 1511,
                   "name": "SurveyStatus",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 1345,
-                  "src": "658:12:2",
+                  "referencedDeclaration": 1484,
+                  "src": "658:12:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_SurveyStatus_$1345",
+                    "typeIdentifier": "t_enum$_SurveyStatus_$1484",
                     "typeString": "enum RNStorage.SurveyStatus"
                   }
                 },
@@ -1795,11 +1795,11 @@
               },
               {
                 "constant": false,
-                "id": 1375,
+                "id": 1514,
                 "name": "suspended",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "687:14:2",
+                "scope": 1519,
+                "src": "687:14:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1807,10 +1807,10 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 1374,
+                  "id": 1513,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
-                  "src": "687:4:2",
+                  "src": "687:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_bool",
                     "typeString": "bool"
@@ -1821,44 +1821,44 @@
               },
               {
                 "constant": false,
-                "id": 1379,
+                "id": 1518,
                 "name": "answers",
                 "nodeType": "VariableDeclaration",
-                "scope": 1380,
-                "src": "711:35:2",
+                "scope": 1519,
+                "src": "711:35:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1355_storage_$",
+                  "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1494_storage_$",
                   "typeString": "mapping(address => struct RNStorage.Answer)"
                 },
                 "typeName": {
-                  "id": 1378,
+                  "id": 1517,
                   "keyType": {
-                    "id": 1376,
+                    "id": 1515,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "720:7:2",
+                    "src": "720:7:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
                   "nodeType": "Mapping",
-                  "src": "711:27:2",
+                  "src": "711:27:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1355_storage_$",
+                    "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Answer_$1494_storage_$",
                     "typeString": "mapping(address => struct RNStorage.Answer)"
                   },
                   "valueType": {
                     "contractScope": null,
-                    "id": 1377,
+                    "id": 1516,
                     "name": "Answer",
                     "nodeType": "UserDefinedTypeName",
-                    "referencedDeclaration": 1355,
-                    "src": "731:6:2",
+                    "referencedDeclaration": 1494,
+                    "src": "731:6:4",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Answer_$1355_storage_ptr",
+                      "typeIdentifier": "t_struct$_Answer_$1494_storage_ptr",
                       "typeString": "struct RNStorage.Answer"
                     }
                   }
@@ -1869,21 +1869,21 @@
             ],
             "name": "Survey",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "426:327:2",
+            "scope": 1587,
+            "src": "426:327:4",
             "visibility": "public"
           },
           {
             "canonicalName": "RNStorage.Product",
-            "id": 1397,
+            "id": 1536,
             "members": [
               {
                 "constant": false,
-                "id": 1382,
+                "id": 1521,
                 "name": "productAddress",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "784:22:2",
+                "scope": 1536,
+                "src": "784:22:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1891,10 +1891,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1381,
+                  "id": 1520,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "784:7:2",
+                  "src": "784:7:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
@@ -1905,11 +1905,11 @@
               },
               {
                 "constant": false,
-                "id": 1384,
+                "id": 1523,
                 "name": "addedBy",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "816:15:2",
+                "scope": 1536,
+                "src": "816:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1917,10 +1917,10 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 1383,
+                  "id": 1522,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
-                  "src": "816:7:2",
+                  "src": "816:7:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_address",
                     "typeString": "address"
@@ -1931,11 +1931,11 @@
               },
               {
                 "constant": false,
-                "id": 1386,
+                "id": 1525,
                 "name": "categoryId",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "841:15:2",
+                "scope": 1536,
+                "src": "841:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1943,10 +1943,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1385,
+                  "id": 1524,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "841:4:2",
+                  "src": "841:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1957,11 +1957,11 @@
               },
               {
                 "constant": false,
-                "id": 1388,
+                "id": 1527,
                 "name": "subcategoryId",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "866:18:2",
+                "scope": 1536,
+                "src": "866:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1969,10 +1969,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1387,
+                  "id": 1526,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "866:4:2",
+                  "src": "866:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -1983,11 +1983,11 @@
               },
               {
                 "constant": false,
-                "id": 1390,
+                "id": 1529,
                 "name": "name",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "894:11:2",
+                "scope": 1536,
+                "src": "894:11:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -1995,10 +1995,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1389,
+                  "id": 1528,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "894:6:2",
+                  "src": "894:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -2009,11 +2009,11 @@
               },
               {
                 "constant": false,
-                "id": 1392,
+                "id": 1531,
                 "name": "image",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "915:12:2",
+                "scope": 1536,
+                "src": "915:12:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2021,10 +2021,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1391,
+                  "id": 1530,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "915:6:2",
+                  "src": "915:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -2035,11 +2035,11 @@
               },
               {
                 "constant": false,
-                "id": 1394,
+                "id": 1533,
                 "name": "description",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "937:18:2",
+                "scope": 1536,
+                "src": "937:18:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2047,10 +2047,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1393,
+                  "id": 1532,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "937:6:2",
+                  "src": "937:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -2061,11 +2061,11 @@
               },
               {
                 "constant": false,
-                "id": 1396,
+                "id": 1535,
                 "name": "metaJsonHash",
                 "nodeType": "VariableDeclaration",
-                "scope": 1397,
-                "src": "965:19:2",
+                "scope": 1536,
+                "src": "965:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2073,10 +2073,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1395,
+                  "id": 1534,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "965:6:2",
+                  "src": "965:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -2088,36 +2088,36 @@
             ],
             "name": "Product",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "759:232:2",
+            "scope": 1587,
+            "src": "759:232:4",
             "visibility": "public"
           },
           {
             "canonicalName": "RNStorage.Review",
-            "id": 1423,
+            "id": 1562,
             "members": [
               {
                 "constant": false,
-                "id": 1399,
+                "id": 1538,
                 "name": "author",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1021:11:2",
+                "scope": 1562,
+                "src": "1021:11:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                  "typeIdentifier": "t_struct$_User_$1491_storage_ptr",
                   "typeString": "struct RNStorage.User"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 1398,
+                  "id": 1537,
                   "name": "User",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 1352,
-                  "src": "1021:4:2",
+                  "referencedDeclaration": 1491,
+                  "src": "1021:4:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                    "typeIdentifier": "t_struct$_User_$1491_storage_ptr",
                     "typeString": "struct RNStorage.User"
                   }
                 },
@@ -2126,26 +2126,26 @@
               },
               {
                 "constant": false,
-                "id": 1401,
+                "id": 1540,
                 "name": "product",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1042:15:2",
+                "scope": 1562,
+                "src": "1042:15:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                  "typeIdentifier": "t_struct$_Product_$1536_storage_ptr",
                   "typeString": "struct RNStorage.Product"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 1400,
+                  "id": 1539,
                   "name": "Product",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 1397,
-                  "src": "1042:7:2",
+                  "referencedDeclaration": 1536,
+                  "src": "1042:7:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                    "typeIdentifier": "t_struct$_Product_$1536_storage_ptr",
                     "typeString": "struct RNStorage.Product"
                   }
                 },
@@ -2154,11 +2154,11 @@
               },
               {
                 "constant": false,
-                "id": 1403,
+                "id": 1542,
                 "name": "score",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1067:10:2",
+                "scope": 1562,
+                "src": "1067:10:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2166,10 +2166,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1402,
+                  "id": 1541,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1067:4:2",
+                  "src": "1067:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -2180,11 +2180,11 @@
               },
               {
                 "constant": false,
-                "id": 1405,
+                "id": 1544,
                 "name": "upvotes",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1087:12:2",
+                "scope": 1562,
+                "src": "1087:12:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2192,10 +2192,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1404,
+                  "id": 1543,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1087:4:2",
+                  "src": "1087:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -2206,11 +2206,11 @@
               },
               {
                 "constant": false,
-                "id": 1407,
+                "id": 1546,
                 "name": "downvotes",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1109:14:2",
+                "scope": 1562,
+                "src": "1109:14:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2218,10 +2218,10 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 1406,
+                  "id": 1545,
                   "name": "uint",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1109:4:2",
+                  "src": "1109:4:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_uint256",
                     "typeString": "uint256"
@@ -2232,11 +2232,11 @@
               },
               {
                 "constant": false,
-                "id": 1409,
+                "id": 1548,
                 "name": "metaJsonHash",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1133:19:2",
+                "scope": 1562,
+                "src": "1133:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2244,10 +2244,10 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 1408,
+                  "id": 1547,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
-                  "src": "1133:6:2",
+                  "src": "1133:6:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_string_storage_ptr",
                     "typeString": "string"
@@ -2258,26 +2258,26 @@
               },
               {
                 "constant": false,
-                "id": 1411,
+                "id": 1550,
                 "name": "status",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1162:19:2",
+                "scope": 1562,
+                "src": "1162:19:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_enum$_ReviewStatus_$1349",
+                  "typeIdentifier": "t_enum$_ReviewStatus_$1488",
                   "typeString": "enum RNStorage.ReviewStatus"
                 },
                 "typeName": {
                   "contractScope": null,
-                  "id": 1410,
+                  "id": 1549,
                   "name": "ReviewStatus",
                   "nodeType": "UserDefinedTypeName",
-                  "referencedDeclaration": 1349,
-                  "src": "1162:12:2",
+                  "referencedDeclaration": 1488,
+                  "src": "1162:12:4",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_enum$_ReviewStatus_$1349",
+                    "typeIdentifier": "t_enum$_ReviewStatus_$1488",
                     "typeString": "enum RNStorage.ReviewStatus"
                   }
                 },
@@ -2286,11 +2286,11 @@
               },
               {
                 "constant": false,
-                "id": 1414,
+                "id": 1553,
                 "name": "chosenValidators",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1191:26:2",
+                "scope": 1562,
+                "src": "1191:26:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2299,19 +2299,19 @@
                 },
                 "typeName": {
                   "baseType": {
-                    "id": 1412,
+                    "id": 1551,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1191:7:2",
+                    "src": "1191:7:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "id": 1413,
+                  "id": 1552,
                   "length": null,
                   "nodeType": "ArrayTypeName",
-                  "src": "1191:9:2",
+                  "src": "1191:9:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
                     "typeString": "address[]"
@@ -2322,11 +2322,11 @@
               },
               {
                 "constant": false,
-                "id": 1418,
+                "id": 1557,
                 "name": "validationVotes",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1227:40:2",
+                "scope": 1562,
+                "src": "1227:40:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2334,28 +2334,28 @@
                   "typeString": "mapping(address => int256)"
                 },
                 "typeName": {
-                  "id": 1417,
+                  "id": 1556,
                   "keyType": {
-                    "id": 1415,
+                    "id": 1554,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1236:7:2",
+                    "src": "1236:7:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
                   "nodeType": "Mapping",
-                  "src": "1227:24:2",
+                  "src": "1227:24:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_mapping$_t_address_$_t_int256_$",
                     "typeString": "mapping(address => int256)"
                   },
                   "valueType": {
-                    "id": 1416,
+                    "id": 1555,
                     "name": "int",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1247:3:2",
+                    "src": "1247:3:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_int256",
                       "typeString": "int256"
@@ -2367,11 +2367,11 @@
               },
               {
                 "constant": false,
-                "id": 1422,
+                "id": 1561,
                 "name": "userVotes",
                 "nodeType": "VariableDeclaration",
-                "scope": 1423,
-                "src": "1277:35:2",
+                "scope": 1562,
+                "src": "1277:35:4",
                 "stateVariable": false,
                 "storageLocation": "default",
                 "typeDescriptions": {
@@ -2379,28 +2379,28 @@
                   "typeString": "mapping(address => bool)"
                 },
                 "typeName": {
-                  "id": 1421,
+                  "id": 1560,
                   "keyType": {
-                    "id": 1419,
+                    "id": 1558,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1286:7:2",
+                    "src": "1286:7:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
                   "nodeType": "Mapping",
-                  "src": "1277:25:2",
+                  "src": "1277:25:4",
                   "typeDescriptions": {
                     "typeIdentifier": "t_mapping$_t_address_$_t_bool_$",
                     "typeString": "mapping(address => bool)"
                   },
                   "valueType": {
-                    "id": 1420,
+                    "id": 1559,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "1297:4:2",
+                    "src": "1297:4:4",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -2413,17 +2413,17 @@
             ],
             "name": "Review",
             "nodeType": "StructDefinition",
-            "scope": 1448,
-            "src": "997:322:2",
+            "scope": 1587,
+            "src": "997:322:4",
             "visibility": "public"
           },
           {
             "constant": true,
-            "id": 1426,
+            "id": 1565,
             "name": "NUMBER_OF_VALIDATORS",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1359:38:2",
+            "scope": 1587,
+            "src": "1359:38:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2431,10 +2431,10 @@
               "typeString": "uint256"
             },
             "typeName": {
-              "id": 1424,
+              "id": 1563,
               "name": "uint",
               "nodeType": "ElementaryTypeName",
-              "src": "1359:4:2",
+              "src": "1359:4:4",
               "typeDescriptions": {
                 "typeIdentifier": "t_uint256",
                 "typeString": "uint256"
@@ -2443,14 +2443,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "33",
-              "id": 1425,
+              "id": 1564,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "1396:1:2",
+              "src": "1396:1:4",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3_by_1",
@@ -2462,26 +2462,26 @@
           },
           {
             "constant": false,
-            "id": 1428,
+            "id": 1567,
             "name": "token",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1438:14:2",
+            "scope": 1587,
+            "src": "1438:14:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_contract$_REWToken_$39",
+              "typeIdentifier": "t_contract$_REWToken_$96",
               "typeString": "contract REWToken"
             },
             "typeName": {
               "contractScope": null,
-              "id": 1427,
+              "id": 1566,
               "name": "REWToken",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 39,
-              "src": "1438:8:2",
+              "referencedDeclaration": 96,
+              "src": "1438:8:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_REWToken_$39",
+                "typeIdentifier": "t_contract$_REWToken_$96",
                 "typeString": "contract REWToken"
               }
             },
@@ -2490,44 +2490,44 @@
           },
           {
             "constant": false,
-            "id": 1432,
+            "id": 1571,
             "name": "surveys",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1505:34:2",
+            "scope": 1587,
+            "src": "1505:34:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1380_storage_$",
+              "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1519_storage_$",
               "typeString": "mapping(string => struct RNStorage.Survey)"
             },
             "typeName": {
-              "id": 1431,
+              "id": 1570,
               "keyType": {
-                "id": 1429,
+                "id": 1568,
                 "name": "string",
                 "nodeType": "ElementaryTypeName",
-                "src": "1514:6:2",
+                "src": "1514:6:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_string_storage_ptr",
                   "typeString": "string"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1505:26:2",
+              "src": "1505:26:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1380_storage_$",
+                "typeIdentifier": "t_mapping$_t_string_memory_$_t_struct$_Survey_$1519_storage_$",
                 "typeString": "mapping(string => struct RNStorage.Survey)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 1430,
+                "id": 1569,
                 "name": "Survey",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1380,
-                "src": "1524:6:2",
+                "referencedDeclaration": 1519,
+                "src": "1524:6:4",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Survey_$1380_storage_ptr",
+                  "typeIdentifier": "t_struct$_Survey_$1519_storage_ptr",
                   "typeString": "struct RNStorage.Survey"
                 }
               }
@@ -2537,44 +2537,44 @@
           },
           {
             "constant": false,
-            "id": 1436,
+            "id": 1575,
             "name": "products",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1545:37:2",
+            "scope": 1587,
+            "src": "1545:37:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1397_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1536_storage_$",
               "typeString": "mapping(address => struct RNStorage.Product)"
             },
             "typeName": {
-              "id": 1435,
+              "id": 1574,
               "keyType": {
-                "id": 1433,
+                "id": 1572,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1554:7:2",
+                "src": "1554:7:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1545:28:2",
+              "src": "1545:28:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1397_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Product_$1536_storage_$",
                 "typeString": "mapping(address => struct RNStorage.Product)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 1434,
+                "id": 1573,
                 "name": "Product",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1397,
-                "src": "1565:7:2",
+                "referencedDeclaration": 1536,
+                "src": "1565:7:4",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Product_$1397_storage_ptr",
+                  "typeIdentifier": "t_struct$_Product_$1536_storage_ptr",
                   "typeString": "struct RNStorage.Product"
                 }
               }
@@ -2584,44 +2584,44 @@
           },
           {
             "constant": false,
-            "id": 1440,
+            "id": 1579,
             "name": "users",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1588:31:2",
+            "scope": 1587,
+            "src": "1588:31:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1352_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1491_storage_$",
               "typeString": "mapping(address => struct RNStorage.User)"
             },
             "typeName": {
-              "id": 1439,
+              "id": 1578,
               "keyType": {
-                "id": 1437,
+                "id": 1576,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1597:7:2",
+                "src": "1597:7:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1588:25:2",
+              "src": "1588:25:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1352_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_User_$1491_storage_$",
                 "typeString": "mapping(address => struct RNStorage.User)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 1438,
+                "id": 1577,
                 "name": "User",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1352,
-                "src": "1608:4:2",
+                "referencedDeclaration": 1491,
+                "src": "1608:4:4",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_User_$1352_storage_ptr",
+                  "typeIdentifier": "t_struct$_User_$1491_storage_ptr",
                   "typeString": "struct RNStorage.User"
                 }
               }
@@ -2631,44 +2631,44 @@
           },
           {
             "constant": false,
-            "id": 1444,
+            "id": 1583,
             "name": "reviews",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1625:35:2",
+            "scope": 1587,
+            "src": "1625:35:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1423_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1562_storage_$",
               "typeString": "mapping(address => struct RNStorage.Review)"
             },
             "typeName": {
-              "id": 1443,
+              "id": 1582,
               "keyType": {
-                "id": 1441,
+                "id": 1580,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1634:7:2",
+                "src": "1634:7:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
               "nodeType": "Mapping",
-              "src": "1625:27:2",
+              "src": "1625:27:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1423_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Review_$1562_storage_$",
                 "typeString": "mapping(address => struct RNStorage.Review)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 1442,
+                "id": 1581,
                 "name": "Review",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 1423,
-                "src": "1645:6:2",
+                "referencedDeclaration": 1562,
+                "src": "1645:6:4",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Review_$1423_storage_ptr",
+                  "typeIdentifier": "t_struct$_Review_$1562_storage_ptr",
                   "typeString": "struct RNStorage.Review"
                 }
               }
@@ -2678,11 +2678,11 @@
           },
           {
             "constant": false,
-            "id": 1447,
+            "id": 1586,
             "name": "validators",
             "nodeType": "VariableDeclaration",
-            "scope": 1448,
-            "src": "1666:20:2",
+            "scope": 1587,
+            "src": "1666:20:4",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -2691,19 +2691,19 @@
             },
             "typeName": {
               "baseType": {
-                "id": 1445,
+                "id": 1584,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
-                "src": "1666:7:2",
+                "src": "1666:7:4",
                 "typeDescriptions": {
                   "typeIdentifier": "t_address",
                   "typeString": "address"
                 }
               },
-              "id": 1446,
+              "id": 1585,
               "length": null,
               "nodeType": "ArrayTypeName",
-              "src": "1666:9:2",
+              "src": "1666:9:4",
               "typeDescriptions": {
                 "typeIdentifier": "t_array$_t_address_$dyn_storage_ptr",
                 "typeString": "address[]"
@@ -2713,11 +2713,11 @@
             "visibility": "internal"
           }
         ],
-        "scope": 1449,
-        "src": "112:1577:2"
+        "scope": 1588,
+        "src": "112:1577:4"
       }
     ],
-    "src": "0:1690:2"
+    "src": "0:1690:4"
   },
   "compiler": {
     "name": "solc",
@@ -2725,5 +2725,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-09-05T20:31:05.171Z"
+  "updatedAt": "2018-09-06T21:36:43.768Z"
 }
