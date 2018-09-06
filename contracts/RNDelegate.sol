@@ -1,70 +1,11 @@
 pragma solidity ^0.4.24;
 pragma experimental ABIEncoderV2;
 
-import "./REWToken.sol";
 import "zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "./RNStorage.sol";
 
-contract ReviewNetwork is Ownable {
-    REWToken token;
-    uint constant NUMBER_OF_VALIDATORS = 3;
-
-    enum SurveyStatus { IDLE, FUNDED, IN_PROGRESS, COMPLETED }
-    enum ReviewStatus { PENDING, APPROVED, REJECTED }
-
-    struct User {
-        string username;
-    }
-
-    struct Answer {
-        string answersJsonHash;
-    }
-
-    struct Survey {
-        address creator;
-        string publicKey;
-        string title;
-        string surveyJsonHash;
-        uint rewardPerSurvey;
-        uint funds;
-        uint currentAnswers;
-        uint maxAnswers;
-        SurveyStatus status;
-        bool suspended;
-        mapping (address => Answer) answers;
-    }
-
-    struct Product {
-        address productAddress;
-        address addedBy;
-        uint categoryId;
-        uint subcategoryId;
-        string name;
-        string image;
-        string description;
-        string metaJsonHash;
-    }
-
-    struct Review {
-        User author;
-        Product product;
-        uint score;
-        uint upvotes;
-        uint downvotes;
-        string metaJsonHash;
-        ReviewStatus status;
-        address[] chosenValidators;
-        mapping (address => int) validationVotes;
-        mapping (address => bool) userVotes;
-    }
-
-    /**
-     * key: string - Survey JSON IPFS hash
-     */
-    mapping (string => Survey) surveys;
-    mapping (address => Product) products;
-    mapping (address => User) users;
-    mapping (address => Review) reviews;
-    address[] validators;
+contract RNDelegate is RNStorage, Ownable {
+    RNStorage rnStorage;
 
     event LogSurveyAdded(
         address indexed creator,
@@ -146,9 +87,7 @@ contract ReviewNetwork is Ownable {
         address indexed reviewAddress
     );
 
-    constructor (address REWTokenAddress) public {
-        token = REWToken(REWTokenAddress);
-    }
+    constructor () public {}
 
     function createSurvey(
         string publicKey,
